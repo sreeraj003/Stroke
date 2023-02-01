@@ -8,10 +8,10 @@
              
             <div class="card mb-3" style="height:160px" >
                 <div class="row g-0">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <img style="height:160px" src="{{this.product.thumb_image}}" class="img-fluid rounded-start" alt="...">
                     </div>
-                    <div class="col-4" style="height: 200px;">
+                    <div class="col-3" style="height: 200px;">
                         <div class="card-body p-1">
                             <h3 class="card-title mt-0 text-dark mb-0"><strong>{{this.product.name}}</strong></h3>
                             <h5 class="card-text   text-success mb-0" >USD:<h5 id="pro_{{product._id}}">{{this.product.price}}</h5></h5>
@@ -19,14 +19,16 @@
                                 <form action="" id="formsub" method="post">
                                     <button class="mb-1"type="button" onclick="decrease('{{product._id}}')" value="{{product._id}}">-</button>
                                     <input class="mb-1 text-center" name="count"  type="text"  value="{{quantity}}" maxlength="2" min="1"  max="10" size="1" id="id_{{product._id}}">
-                                    <button class="mb-1"type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>          
-                                                           
+                                    <button class="mb-1"type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>                                    
                                 </form>
                             </div>
                         </div>    
                     </div>
-                    <div class="col-md-4">
-                        <a href="/singleProduct?id={{this.item}}"><button class="mt-3 mb-2 btn btn-sm btn-primary " type="submit" >View</button></a>
+                    <div class="col-md-3">
+                        {{this.product.description}}
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/singleProduct?id={{this.item}}"><button class="mt-2 mb-2 btn btn-sm btn-primary " type="submit" >View</button></a><br>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="remomveCart('{{this.item}}')" data-bs-target="#exampleModal">Remove</button>                
                     </div>
                     
@@ -63,9 +65,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        
     </div>
 </div>
 <div class="col-2">
@@ -73,7 +73,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Remove Item?</h1>
+                    <h1 class="modal-title  fs-5" id="exampleModalLabel">Remove Item?</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -100,56 +100,49 @@ function increase(data){
             if(value<=10){
             document.getElementById('id_'+data).value = value; 
             document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) + parseInt(document.getElementById('pro_'+data).innerHTML)
- 
-    fetch("/increaseCartCount", {
-    method: "post",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        id: ID
-      })
-  })
-  .then(response =>{ response.json()
 
-})
-  .then(data => {
-  
-  })
-  .catch(error => {
-    console.error("Error:", error);
-  });
-
-}
+            $.ajax({
+                type:'POST',
+                url:'/increaseCartCount',
+                data:{
+                    id:ID
+                },success:function(data){},
+                error:function(error){
+                    console.log(error)
+                }
+            })
         }
  }
+}
+
+
+
+
+
 function decrease(data){
     const ID = data
-   var value = parseInt(document.getElementById('id_'+data ).value, 10);
-      value = isNaN(value) ? 1 : value;
-      if(value<=10){
-        value--;
-    if(value>=1){
-        document.getElementById('id_'+data).value = value;
-        document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) - parseInt(document.getElementById('pro_'+data).innerHTML)
-
-    fetch("/decreaseCartCount", {
-    method: "post",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        id: ID
-      })
-  })
-  .then(response => {
-    response.json()
-    })
-    .then(data => {
-        
-  })
-  .catch(error => {
-    console.error("Error:", error);
-  });
+    var value = parseInt(document.getElementById('id_'+data ).value, 10);
+        value = isNaN(value) ? 1 : value;
+        if(value<=10){
+            value--;
+        if(value>=1){
+            document.getElementById('id_'+data).value = value;
+            document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) - parseInt(document.getElementById('pro_'+data).innerHTML)
+            $.ajax({
+                type:'POST',
+                url:'/decreaseCartCount',
+                data:{
+                    id:ID
+                },
+                success:function(data){
+                },
+                error:function(error){
+                    console.log(error)
+                }
+            })
+        }
+    }
 }
-}
-      }
 
 
   function proceedorder(){

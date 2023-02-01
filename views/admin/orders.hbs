@@ -71,7 +71,7 @@
                                     <td>{{num @index}}</td>
                                     <td style="width: 200px;">{{date}}</td>
                                     <td>{{user}}</td>
-                                    <td>{{#each product}}{{this.name}}<br>{{/each}}</td>
+                                    <td>{{#each product}}{{this.name}}&nbsp;{{this.category}}<br>{{/each}}</td>
                                     <td>{{#each amount}}{{this}} <br>{{/each}} <input type="hidden" id="idValue" value="{{_id}}"></td>
                                     <td>{{#if is_rejected}}<div id="rejectmessage-div" style=" background-color: rgb(210, 0, 0);">Cancelled</div>{{else}}{{#ifEquals status 'ordered'}}Order Placed{{/ifEquals}}{{#ifEquals status 'packed'}}Packed{{/ifEquals}}{{#ifEquals status 'shipped'}}Shipped{{/ifEquals}}{{#ifEquals status 'delivered'}}Delivered{{/ifEquals}}{{/if}}</td>
                                     <td>{{#if is_rejected }}

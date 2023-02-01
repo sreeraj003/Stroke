@@ -15,9 +15,10 @@
             <h3>Choose payment option</h3>
             <div style="border-style: solid;border-width: 1px;" class="p-3 text-dark">
                 <ul class="list-group">
-                    <li class="list-group-item"><button onclick=" document.getElementById('paypal-button-container').style.display = 'block';" id="onlinePay" name="Online" class="btn w-100 text-left">online</button></li>
-                    
+                    <li class="list-group-item"><button onclick=" document.getElementById('paypal-button-container').style.display = 'block';" id="onlinePay" name="Online" class="btn w-100 text-left">online</button></li>                   
                     <li class="list-group-item"><button onclick="document.getElementById('proceed').style.display = 'block';" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
+                    <li class="list-group-item"><button onclick="document.getElementById('wallet').style.display = 'block';" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
+                    
                 </ul>
             </div>
         </div>
@@ -51,6 +52,7 @@
                         <input type="hidden" name="payment" value="Cash">
                         <button class="btn btn-primary" type="submit" id="proceed" style="display: none;" >Proceed</button><br>
                         <div id="paypal-button-container" style="display: none;" ></div>
+                        <div id="wallet"></div>
                     </form>
                 </center>
             </div>

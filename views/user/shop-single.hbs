@@ -15,11 +15,10 @@
                 <img class="col-12" id="main-image" src="/{{Item.image.[0]}} " width="520" height="500px"> 
             </div>
                
-              <div class=" mt-1 g-1" style="flex-direction: row!important;display: inline-flex;">
-                <img width="80px;" onclick="change_image(this)" height="60px" src="/{{Item.image.[0]}}" alt="">
-                <img width="80px;" onclick="change_image(this)" height="60px" src="/{{Item.image.[1]}}" alt="">
-                <img width="80px;" onclick="change_image(this)" height="60px" src="/{{Item.image.[2]}}" alt="">
-                <img width="80px;" onclick="change_image(this)" height="60px" src="/{{Item.image.[3]}}" alt="">
+              <div class=" mt-1 g-1" style="flex-direction: row!important;display: inline-flex;">\
+                {{#each Item.image}}
+                <img width="80px;" onclick="change_image(this)" height="60px" src="/{{this}}" alt="">
+                {{/each}}
               </div>
                     
           </div>
@@ -44,11 +43,11 @@
             <div class="mb-5 ">
               <form id="formId" action="/addcartitem" method="post">      
                 <input class="mb-1"type="button" onclick="decrementValue()" value="-" />
-                <input class="mb-1 text-center" name="count" type="text" name="quantity" value="1" maxlength="2" max="10" size="1" id="number">
+                <input class="mb-1 text-center" name="count" type="number" name="quantity" value="1" maxlength="2" max="10" size="1" id="number">
                 <input class="mb-1"type="button" onclick="incrementValue()" value="+" />
                 <input type="hidden" name="item_id" value="{{Item._id}}">
                 <br>
-                <button class=" btn btn-sm btn-success" >Add to cart</button>&nbsp;</p>
+                <button class=" btn btn-sm btn-success" id="addToCart" >Add to cart</button>&nbsp;</p>
               </form>
                 <button class=" btn btn-sm btn-primary" onclick="wishlist('{{Item._id}}')">Add to wishlist</button></a>
             </div>
@@ -87,6 +86,28 @@
       }
 
   }
+</script>
+
+<script>
+  $('#addToCart').click(function(){
+    const count = document.getElementById('number').value
+    const item_id = document.getElementById('item_id').value
+      $.ajax({
+    type: 'POST',
+    url: '/admin/addcartitem',
+    data: {
+       count: count,
+       item_id: item_id
+        },
+    success: function (data) {
+
+    },
+    error: function (error) {
+      // handle error
+      console.error('Failed to add item to cart');
+    }
+  });
+});
 </script>
 
 <script>

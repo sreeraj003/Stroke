@@ -16,7 +16,7 @@
             <b>Delivery Address:</b>{{orderData.address}} <br>
             <b>Payment Method:</b>{{orderData.payment}} <br>
             <b>Status:</b>{{#if orderData.is_rejected}}<p class="text-danger">Cancelled</p>{{else}}<p class="text-success">{{orderData.status}}</p>{{/if}} <br>
-            <b>{{#if returnData}}ReturnStatus &nbsp; <br> {{#each returnData}}{{#each item}}{{this.name}}:{{../returnStatus}}{{/each}}{{/each}}{{/if}}</b><br><br>
+            <b>{{#if returnData}}Return Status &nbsp; <br> {{#each returnData}}{{#each item}}{{this.name}}:{{../returnStatus}}{{/each}}{{/each}}{{/if}}</b><br><br>
             <b>Purchased products</b> <br>
             <table style="width: 100%;">
                 <thead>
@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{#each orderData.product}} <p>{{this.name}}</p>{{/each}}</td>
+                        <td>{{#each orderData.product}} <p>{{this.name}}&nbsp;{{this.category}}</p>{{/each}}</td>
                         <td>{{#each orderData.quantity}} <p>{{this}}</p>{{/each}}</td>
                         <td>{{#each orderData.price}} <p>{{this}}</p>{{/each}}</td>
                         <td>{{#each orderData.amount}} <p>{{this}}</p>{{/each}}</td>
@@ -102,9 +102,3 @@
     }
 
 </script>
-
-
-
-
-
-                        {{!-- <td>{{#each orderData.product}}{{#if orderData.is_rejected}}Rejected order{{else}}{{#if ../returnData}}{{#ifEquals ../returnData.returnStatus 'requsted'}}Return requested pending{{/ifEquals}}{{#ifEquals ../returnData.returnStatus 'returned'}}Return confirmed{{/ifEquals}}{{#ifEquals ../returnData.returnStatus 'rejected'}}request rejected{{/ifEquals}}{{else}} <button type="button" class="btn btn-success ms-auto" onclick="returnOrderData('{{_id}}')" style="float: right;" data-bs-toggle="modal" data-bs-target="#Reject">Return</button><br><br>{{/if}}{{/if}}{{/each}}</td> --}}

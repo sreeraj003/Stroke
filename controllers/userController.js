@@ -655,7 +655,8 @@ const lookupoutData = category.map((x)=>{
   return x})
   const products = lookupoutData[0]
   const productsData = products.Products
-    res.render('shop',{productsData,categoryData})
+  const userData = await User.findById({_id:req.session.user_id}).lean()
+    res.render('shop',{productsData,categoryData,userData})
   } catch (error) {
     next(error)
   }
@@ -854,7 +855,7 @@ const viewOrder = async (req,res,next)=>{
       }
     }
     ])
-    // console.log(returnData);
+    console.log(orderData);
     res.render('viewOrder',{orderData,userData,returnData})
   } catch (error) {
     next(error)
