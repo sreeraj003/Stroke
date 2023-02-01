@@ -1,0 +1,192 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+<button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to Logout?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+    <div class="sidebar pe-4 mt-5">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <a href="index.html" class="navbar-brand">
+                <h3 class="text-primary">Category</h3>
+            </a>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>     
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>       
+            </div>
+        </nav>
+    </div>
+    <!-- Sidebar end -->
+
+    <div class="content mt-5" style="height: 70vh;">
+            <!-- Navbar Start -->
+            <nav class="navbar  bg-light navbar-light sticky-top px-4 py-0">
+                <div class="ms-auto">
+                    <a href="/admin/addCoupon"><button class="me-5" style="background-color: blueviolet;border: 0ch;color: aliceblue;border-radius: 10px;" type="button">Add new coupon</button></a>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <table style="width: 65vw!important;" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Product</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-items-center text-center">
+                                {{#each requestData}}
+                                <tr>
+                                    <td>{{user.[0].name}}</td>
+                                    <td>{{#each item}}{{name}}{{/each}}</td>
+                                    <td>{{reason}}</td>
+                                    <td>{{returnStatus}}</td>
+                                    <td>
+                                        {{#ifEquals returnStatus 'requested'}}<button type="button" class="btn btn-warning" data-bs-toggle="modal" onclick="accept('{{_id}}')" data-bs-target="#acceptModal">Accept</button><br><br><button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="reject('{{_id}}')" data-bs-target="#rejectModal">Reject</button>{{/ifEquals}}                   
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>                  
+                </div>
+            </div>
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="acceptModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Accept Request?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to accept this request..?
+                    <input type="hidden" id="acceptID">
+                    <input type="hidden" id="prodPrice">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmAccept()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="rejectModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Reject Request?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to reject this request..?
+                    <input type="hidden" id="rejectID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmReject()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+<script>
+    function accept(data) {
+        console.log('first')
+    document.getElementById('acceptID').value=data
+ }
+    function confirmAccept(){
+
+        console.log('second')
+      const id = document.getElementById('acceptID').value
+    fetch("/admin/acceptReturn", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
+    
+</script>
+<script>
+    function reject(data) {
+        console.log('2')
+    document.getElementById('rejectID').value=data
+    }
+    function confirmReject(){
+      const id = document.getElementById('rejectID').value
+    fetch("/admin/rejectReturn", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
+    
+</script>

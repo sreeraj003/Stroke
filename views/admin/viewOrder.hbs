@@ -1,0 +1,73 @@
+ <div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+    <button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+    </button>
+
+        <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to Logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0" style="height: 80vh;">
+        <!-- Sidebar Start -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar pe-4 pb-1 mt-5">
+                    <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+                        <h3 class="text-primary">Inventory</h3>
+                        <div class="navbar-nav w-100">
+                            <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                            <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                            <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                            <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                            <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                            <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                            <a href="/admin/users" class="nav-item nav-link">users</a> 
+                            <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-9 text-dark mt-5 p-5" style="border: 1px;border-style: solid">
+                <b> Date of order:</b>{{orderData.date}} <br>
+                <b>Delivery Address:</b>{{orderData.address}} <br>
+                <b>Payment Method:</b>{{orderData.payment}} <br>
+                <b>Status:</b>{{#if orderData.is_rejected}} <p class="text-danger">Cancelled</p>{{else}} <p class="text-success">{{orderData.status}}</p>{{/if}} <br>
+                <b>Purchased products</b> <br>
+                {{#if returnData}}{{#each returnData}}{{item}}:{{returnStatus}}{{/each}}{{/if}}
+                <table style="border: 1px;border-style: solid;width: 100%;">
+                    <thead style="border-style: solid;border-width: 1px;">
+                        <tr>
+                            <th>Items</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border: 1px;border-style: solid">
+                        <tr>
+                            <td>{{#each orderData.product}} <p>{{this.name}}</p>{{/each}}</td>
+                            <td>{{#each orderData.quantity}} <p>{{this}}</p>{{/each}}</td>
+                            <td>{{#each orderData.price}} <p>{{this}}</p>{{/each}}</td>
+                            <td>{{#each orderData.amount}} <p>{{this}}</p>{{/each}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>

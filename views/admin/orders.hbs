@@ -1,0 +1,187 @@
+
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+<button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+        </button>
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to Logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar pe-4 pb-1 mt-5">
+                    <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+                        <h3 class="text-primary">Orders</h3>
+                        <div class="navbar-nav w-100">
+                            <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                            <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                            <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                            <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                            <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                            <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                            <a href="/admin/users" class="nav-item nav-link">users</a>   
+                            <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        
+   
+    <!-- Sidebar end -->
+
+            <div class="col-md-9">
+             <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <table id="myTable" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                  <th>SL No</th>
+                                    <th style="width: 200px;">Date</th>
+                                    <th>User</th>
+                                    <th>Products</th>
+                                    <th>total</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                {{#each orderData}}                                
+                                <tr>
+                                    <td>{{num @index}}</td>
+                                    <td style="width: 200px;">{{date}}</td>
+                                    <td>{{user}}</td>
+                                    <td>{{#each product}}{{this.name}}<br>{{/each}}</td>
+                                    <td>{{#each amount}}{{this}} <br>{{/each}} <input type="hidden" id="idValue" value="{{_id}}"></td>
+                                    <td>{{#if is_rejected}}<div id="rejectmessage-div" style=" background-color: rgb(210, 0, 0);">Cancelled</div>{{else}}{{#ifEquals status 'ordered'}}Order Placed{{/ifEquals}}{{#ifEquals status 'packed'}}Packed{{/ifEquals}}{{#ifEquals status 'shipped'}}Shipped{{/ifEquals}}{{#ifEquals status 'delivered'}}Delivered{{/ifEquals}}{{/if}}</td>
+                                    <td>{{#if is_rejected }}
+                                        {{else}}
+                                        <button id="changeStatus" class="btn btn-warning" type="button" onclick='return changeOrderStatus("{{_id}}")'>change</button></td>
+                                        {{/if}}
+                                    <td> 
+                                        <a href="/admin/viewOrder?id={{_id}}"><button  class="btn btn-primary">View</button></a>
+
+                                        {{#if is_rejected }}
+                                        {{else}}
+                                        <button type="button" class="btn btn-danger ms-auto" onclick="rejectButton('{{_id}}')" style="float: right;" data-bs-toggle="modal" data-bs-target="#RejectBut">
+                                            Reject
+                                        </button>
+                                        {{/if}}
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="RejectBut" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Reject</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to Reject this order?
+                                                <input type="hidden" id="order_id">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                
+                                                <button class="btn btn-danger mt-1 mb-1" onclick='return rejectapprove()' id="reject-Button" >Reject</button>
+                                                
+                                                
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+
+<script>
+  function rejectButton(data){
+    document.getElementById('order_id').value = data
+  }
+   function rejectapprove() {
+    const id = document.getElementById("order_id").value
+    console.log(id)
+    fetch("/admin/rejectOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#RejectBut').modal('hide')
+        console.log(response)
+        })
+
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+   };
+</script>
+<script>
+   function changeOrderStatus(data) {
+    const id = data
+    console.log(id)
+    fetch("/admin/changeStatus", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        console.log(response)
+        })
+
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+   };
+</script>

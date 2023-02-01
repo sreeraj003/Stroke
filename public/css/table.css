@@ -1,0 +1,4 @@
+table,thead,tbody, td, tr,th {
+    border-style: solid!important;
+    border-width: 1px!important;
+}

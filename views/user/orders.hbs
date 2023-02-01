@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12 text-center">
+            <h4>Hello {{userData.name}}</h4>
+            </div>
+            <div class="col-12 bg-light align-items-center text-center">
+                <a href="/profile" style="color: rgb(0, 0, 0);">My profile</a><br>
+                <a href="/orders" style="color: rgb(129, 0, 139);">My Orders</a><br>
+                <a href="/address" style="color: black;">My Address</a><br>
+                <a href="/editProfile" style="color: black;">Edit Profile</a><br>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>SL No</th>
+                        <th style="width: 200px;">Date</th>
+                        <th>Products</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orderData}}
+                    <tr id="tab">
+                        <td>{{num @index}}</td>
+                        <td style="width: 200px;">{{date}}</td>
+                        <td>{{#each product}}{{this.name}} <br>{{/each}}</td>
+                        <td>{{#each quantity}}{{this}}<br>{{/each}}</td>
+                        <td>{{#each price}}{{this}}<br>{{/each}}</td>
+                        <td>{{#each amount}}{{this}} <br>{{/each}}</td>
+                        <td>{{#if is_rejected}}Cancelled{{else}}Processing{{/if}}</td>
+                        <td>
+                            {{#if is_rejected }}
+                            
+                                        {{else}}
+                                        <button type="button" class="btn btn-success ms-auto" onclick="cancel('{{_id}}')" style="float: right;" data-bs-toggle="modal" data-bs-target="#Reject">
+                                            cancel
+                                        </button>
+                                        {{/if}}
+
+                                        <!-- Modal -->
+                                        <div class="modal fade mt-5" style="margin-top: 200px!important;" id="Reject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Reject</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to Cancel this order?
+                                                <input type="hidden" id="cancel_id">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                
+                                                <button class="btn btn-danger mt-1 mb-1" data-id="{{_id}}"  onclick=" confirmCancel()" id="reject-Button" >Cancel</button>
+                                                
+                                                
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                <a href="/viewOrder?id={{_id}}"><button class="btn btn-info">View</button></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cancel(data){
+        document.getElementById('cancel_id').value = data
+    }
+   function confirmCancel() {
+    const id = document.getElementById('cancel_id').value
+    console.log(id)
+    fetch("/cancelOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
+</script>

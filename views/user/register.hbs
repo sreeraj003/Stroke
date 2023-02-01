@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3 mx-auto">
+      <form class="row  formcont g-3" action="" method="POST">
+        <div class=" col-md-12 mx-auto">
+          <center> <button class=" stroke bg-light mb-2"><h2>STROKE</h2></button><br></center> 
+        </div>
+        <div class="col-md-12 mx-auto">
+            <center><button class="registerHead"><h1 class="regHeadText">REGISTER</h1></button></center>
+        </div>
+        <div>
+          {{#if check}}
+          <p class="text-danger">{{message}}</p>
+          {{else }}
+          <p class="text-success">{{message}}</p>
+          {{/if}}
+        </div>
+        <div class="col-md-12">
+          <label for="inputName4" class="form-label">Full Name</label>
+          <input type="text" title="Please enter a valid name" name="name" class="form-control" required id="inputName4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputAge4" class="form-label">Age</label>
+          <input type="number" name="age" class="form-control" required id="inputAge4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputEmail4" class="form-label">Email</label>
+          <input type="email" title="please enter a valid email" name="email" class="form-control" required id="inputEmail4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputMobile4" class="form-label">Mobile</label>
+          <input type="tel" name="mobile" title="please enter a valid phone number" pattern="^\d{10}$" max="10" min="10" class="form-control" required id="inputMobile4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputPassword4" class="form-label">Password</label>
+          <input type="password" title="password should contain atleast 6 character" pattern="^.{6,}$" name="password" class="form-control" required id="inputPassword4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputPassword4" class="form-label">Confirm Password</label>
+          <input type="password" title="password should contain atleast 6 character" pattern="^.{6,}$" name="cPassword" class="form-control" required id="inputPassword4" />
+        </div>
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-primary subButton">Register</button>
+          <button type="submit" class="btn btn-primary subButton"><a style="text-decoration: none; color: azure;" href="/login">login</a></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+

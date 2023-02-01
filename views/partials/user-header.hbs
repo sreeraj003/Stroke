@@ -1,0 +1,89 @@
+<header class="site-navbar" tabindex="0" >
+  <div class="site-navbar-top">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+          {{!-- <form action="" class="site-block-top-search">
+            <input type="text" class="form-control border-1" placeholder="Search">
+            <button style="position: absolute;left: 300px;"><i><i class="fa-solid fa-magnifying-glass"></i></i></button>
+          </form> --}}
+          <form class="d-flex site-block-top-search" action="/searchProduct" method="post" role="search">
+        <input class="form-control me-2" type="text" name="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+      </form>
+        </div>
+
+        <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+          <div class="site-logo">
+            <a href="/home" class="js-logo-clone">STROKE</a>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+          <div class="site-top-icons">
+            <ul>
+              <li>
+                <div class="dropdown"> 
+                    {{#if userData}}
+                    Hello {{userData.name}}&nbsp;&nbsp;&nbsp;&nbsp;<button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/profile?id={{userData._id}}">profile</a></li>
+                    <li><a class="dropdown-item" href="/logout">logout</a></li>
+                    </ul>
+                    {{else}}
+                    <button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/login">Login</a></li>
+                    <li><a class="dropdown-item" href="/register">Register</a></li>
+                    </ul>
+                    {{/if}}    
+                </div>
+              </li>
+              <li>
+                <div class="dropdown">
+                    {{#if userData}}
+                    <a href="/wishlist"><button class="bg-light home_profile" style="border: 0ch;" type="button"><i class="fa-solid fa-heart"></i></button></a>
+                    {{else}}
+                    <button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-heart"></i></button>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/login">Login</a></li>
+                    <li><a class="dropdown-item" href="/register">Register</a></li>
+                    </ul>
+                    {{/if}}
+                  
+                </div>
+              </li>
+              <li>
+                <div class="dropdown">
+                    {{#if userData}}
+                    <a href="/cart"><button class="bg-light home_profile" style="border: 0ch;" type="button"><i class="fa-solid fa-cart-shopping"></i></button></a>
+                    {{else}}
+                    <button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-cart-shopping"></i></button>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/login">Login</a></li>
+                    <li><a class="dropdown-item" href="/register">Register</a></li>
+                    </ul>
+                    {{/if}}
+                </div>
+              </li>
+              </li>
+              <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><i class="fa-solid fa-bars"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="site-navigation text-right text-md-center" role="navigation">
+    <div class="container">
+      <ul class="site-menu js-clone-nav d-none d-md-block">
+        <li><a href="/Home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/Categories">Categories</a></li>
+        <li><a href="#newArrivals">New Arrivals</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>

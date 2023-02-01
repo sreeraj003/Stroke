@@ -1,0 +1,110 @@
+<div class="container" >
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12 text-center">
+            <h4>Hello {{userData.name}}</h4>
+            </div>
+            <div class="col-12 bg-light align-items-center text-center">
+                <a href="/profile" style="color: rgb(129, 0, 139);">My profile</a><br>
+                <a href="/orders" style="color: black;">My Orders</a><br>
+                <a href="/address" style="color: black;">My Address</a><br>
+                <a href="/editProfile" style="color: black;">Edit Profile</a><br>
+            </div>
+        </div>
+        <div class="col-md-9 text-dark">
+            <b> Date of order:</b>{{orderData.date}} <br>
+            <b>Delivery Address:</b>{{orderData.address}} <br>
+            <b>Payment Method:</b>{{orderData.payment}} <br>
+            <b>Status:</b>{{#if orderData.is_rejected}}<p class="text-danger">Cancelled</p>{{else}}<p class="text-success">{{orderData.status}}</p>{{/if}} <br>
+            <b>{{#if returnData}}ReturnStatus &nbsp; <br> {{#each returnData}}{{#each item}}{{this.name}}:{{../returnStatus}}{{/each}}{{/each}}{{/if}}</b><br><br>
+            <b>Purchased products</b> <br>
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{#each orderData.product}} <p>{{this.name}}</p>{{/each}}</td>
+                        <td>{{#each orderData.quantity}} <p>{{this}}</p>{{/each}}</td>
+                        <td>{{#each orderData.price}} <p>{{this}}</p>{{/each}}</td>
+                        <td>{{#each orderData.amount}} <p>{{this}}</p>{{/each}}</td>
+                        <td>{{#each orderData.product}}{{#if ../orderData.is_rejected}}Rejected order{{else}}<button type="button" class="btn btn-success mx-auto mt-2 " onclick="returnOrderData('{{_id}}','{{../orderData._id}}')" data-bs-toggle="modal" data-bs-target="#Reject">Return</button><br><br>{{/if}}{{/each}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="color: red;" id="message"></div>
+        </div>
+    </div>
+</div>
+ <div class="modal fade mt-5" style="margin-top: 200px!important;" id="Reject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Return</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Why do you wan't to return the product?<br>
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">Reason for return</label>
+                </div>
+                <input type="hidden" id="return_id">
+                <input type="hidden" id="order_id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-danger mt-1 mb-1" data-id="{{_id}}"  onclick=" confirmCancel()" id="reject-Button" >Return</button>                             
+            </div>
+        </div>
+    </div>
+ </div>
+
+<script>
+    function returnOrderData(data,order){
+        document.getElementById('return_id').value = data
+    document.getElementById('order_id').value = order
+    }
+    async function confirmCancel() {
+    const id = document.getElementById('return_id').value
+    const order_id = document.getElementById('order_id').value
+    const reason = document.getElementById('floatingTextarea2').value
+    console.log(reason)
+    let response = await fetch("/returnOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id,
+        reason:reason,
+        order_id:order_id
+      })
+    })
+     let result = await response.json()
+
+        if(result == 'requested'){
+            location.reload()
+        }else if(result=='Exist'){
+             $('#Reject').modal('hide')
+            document.getElementById('message').innerHTML = `You can't return this product`
+        }else{          
+            document.getElementById('message').style.color = 'red'
+            document.getElementById('message').innerHTML = 'something went wrong...!'
+        }
+    }
+
+</script>
+
+
+
+
+
+                        {{!-- <td>{{#each orderData.product}}{{#if orderData.is_rejected}}Rejected order{{else}}{{#if ../returnData}}{{#ifEquals ../returnData.returnStatus 'requsted'}}Return requested pending{{/ifEquals}}{{#ifEquals ../returnData.returnStatus 'returned'}}Return confirmed{{/ifEquals}}{{#ifEquals ../returnData.returnStatus 'rejected'}}request rejected{{/ifEquals}}{{else}} <button type="button" class="btn btn-success ms-auto" onclick="returnOrderData('{{_id}}')" style="float: right;" data-bs-toggle="modal" data-bs-target="#Reject">Return</button><br><br>{{/if}}{{/if}}{{/each}}</td> --}}

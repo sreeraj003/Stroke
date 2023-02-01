@@ -1,0 +1,9 @@
+{
+	"trailingComma": "es5",
+	"tabWidth": 2,
+	"useTabs": false,
+	"Comments": "// Tabs is set to `false` for the sake of npmjs readme only, in all useTabs should be true!",
+	"semi": true,
+	"singleQuote": true,
+	"bracketSpacing": false
+}

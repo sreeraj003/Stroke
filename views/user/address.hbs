@@ -1,0 +1,127 @@
+<div class="container" >
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12 text-center">
+            <h4>Hello {{userData.name}}</h4>
+            </div>
+            <div class="col-12 bg-light align-items-center text-center">
+                <a href="/profile" style="color: black;">My profile</a><br>
+                <a href="/orders" style="color: black;">My Orders</a><br>
+                <a href="/address" style="color: rgb(129, 0, 139);">My Address</a><br>
+                <a href="/editProfile" style="color: black;">Edit Profile</a><br>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-dark"><strong>Add Address</strong></h3>
+            <div class="form-floating">
+                <form class="row" action="" method="post">
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">House No / Name</label>
+                    <input type="text" name="house_no" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                </div>
+                <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Place</label>
+                    <input type="text" name="place"  class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputTown" class="form-label">Town</label>
+                    <input type="text" name="town" class="form-control" id="inputCity">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">City</label>
+                    <input type="text" name="city" class="form-control" id="inputCity">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputDist" class="form-label">Dist.</label>
+                    <input type="text" name="dist" class="form-control" id="inputDist">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputState" class="form-label">State</label>
+                    <input type="text" name="state" class="form-control" id="inputState">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputState" class="form-label">country</label>
+                    <input type="text" name="country" class="form-control" id="inputState">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputZip" class="form-label">Zip</label>
+                    <input type="text" name="zip" class="form-control" id="inputZip">
+                </div>
+                <div class="col-12">
+                    <br><center><button type="submit" class="btn btn-info">Submit</button></center>
+                </div>
+                </form>
+                {{!-- <input type="hidden" name="user_id" value="{{addressData._id}}"> --}}
+                <br>
+                {{!-- <button type="submit" class="btn btn-info">Submit</button> --}}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h6 class="text-dark">Saved address</h6>
+            {{#each addressData}}
+            <div class="row text-dark">
+                <div class="col-10" style="word-wrap: break-word;">
+                   
+                    <b>House_no </b>:{{house_no}} <br>
+                    <b>Place </b>:{{place}} <br>
+                    <b>Town </b>:{{town}} <br>
+                    <b>City </b>:{{city}} <br>
+                    <b>Dist. </b>:{{dist}} <br>
+                    <b>State </b>:{{state}} <br>
+                    <b>Country </b>:{{country}} <br>
+                    <b>ZIP </b>:{{zip}} <br>
+                </div>
+                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="deleteAddress('{{this._id}}')" data-bs-target="#exampleModal">Delete</button>                
+            </div>
+            <br><br>
+            {{/each}}
+        </div>
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Address?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete this address...?
+                    <input type="hidden" id="addressID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmDelete()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<script>
+    function deleteAddress(data){
+       document.getElementById('addressID').value = data
+    }
+    function confirmDelete(){
+        const id = document.getElementById('addressID').value
+       fetch("/deleteAddress", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }
+</script>

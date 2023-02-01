@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12 text-center">
+            <h4>Hello {{userData.name}}</h4>
+            </div>
+            <div class="col-12 bg-light align-items-center text-center">
+                <a href="/profile" style="color: rgb(0, 0, 0);">My profile</a><br>
+                <a href="/orders" style="color: black;">My Orders</a><br>
+                <a href="/address" style="color: black;">My Address</a><br>
+                <a href="/editProfile" style="color:  rgb(129, 0, 139);">Edit Profile</a><br>
+            </div>
+        </div>
+        <div class="col-8" style="height: 55.8vh;">
+            <div class="bg-light"  >
+                <div class="container">        
+                    <form action="" method="post">
+                        <h3 class="text-dark"><strong>Edit Profile</strong></h3>
+                        <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput" name="name" value="{{userData.name}}" >
+                        </div>
+                        <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Age</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput2" name="age" value="{{userData.age}}" >
+                        </div>
+                        <input type="hidden" name="user_id" value="{{userData._id}}" >
+                        <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Mobile</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput2" name="mobile" value="{{userData.mobile}}" >
+                        </div>
+                        <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput2" name="email" value="{{userData.email}}">
+                        </div>
+                        <center><button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">Submit</button></center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

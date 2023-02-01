@@ -1,0 +1,92 @@
+<div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-4 bg-body" >
+                <h3 class="text-dark">Deliver To Address <a href="/address"><button class="btn btn-primary float-right" style="height: 30px;"><h6>New address</h6></button></a></h3>
+                <form action="/placeorders" id="formId" method="post">
+                {{#each addressData}}
+                <div class="text-danger">{{message}}</div>
+                <div class="form-check text-dark col-md-12" onclick="buttonshow()"  style="word-break: break-all;">
+                    <input class="form-check-input text-dark"  type="radio"  onclick="buttonshow()" name="address" id="flexRadioDefault1" value="{{this.house_no}},{{this.place}},{{this.town}},{{this.city}},{{this.dist}},{{this.state}},{{this.country}},{{this.zip}}">
+                    <label class="form-check-label text-dark" onclick="buttonshow()" for="flexRadioDefault1" >
+                        <div style="word-wrap: break-word" >
+                            <p>{{this.house_no}},{{this.place}},{{this.town}},{{this.city}},{{this.dist}},{{this.state}},{{this.country}},{{this.zip}}</p>
+                        </div>
+                    </label>            
+                </div> 
+                {{/each}} 
+                <input type="hidden" id="total" name="total" value="{{#each total}}{{total}}{{/each}}">
+                <div class="p-3" style="border-style: solid;border-width: 1px;">
+                    <p class="text-dark" style="font-size: 13px!important;">Enter your coupon code if you have any</p>
+                    <input style="width: 100%;" type="text" id="couponInput" name="coupon">
+                </div>
+                </form>    
+                <div id="message"></div>
+                <button class="btn btn-primary mt-2 mx-auto" onclick="Buttoncheck()">Apply</button>    
+            </div>
+            <div class="col-md-6 align-items-center text-center mt-4">
+               
+                <table class="table mt-3" style="border-style: solid;border-width: 1px;">
+                    <thead>
+                        <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each productData}}
+                        <tr>
+                            <td scope="row">{{product.name}}</th>
+                            <td>{{quantity}}</td>
+                            <td>{{product.price}}</td>
+                        </tr>
+                        {{/each}}
+                        <tr>
+                            <td colspan="2"><strong>Total</strong></td>
+                            <td><Strong><b>Rs.<b id="totaldisp">{{total.[0].total}}</b>/-</b></Strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-12">
+                    <button class="btn btn-success" id="proced" style="display: none;" onclick="document.getElementById('formId').submit();">Proceed to Pay</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<script>
+    
+    function buttonshow(){
+        document.getElementById('proced').style.display = 'block' 
+    }
+
+</script>
+<script>
+    async function Buttoncheck(){
+        const code = document.getElementById('couponInput').value
+        const total = document.getElementById('total').value
+        console.log(code)
+        let fo = await fetch("/checkCoupon", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            code:code,
+            total:total
+        })
+        })
+        let result = await fo.json()
+        if(result == 'invalid'){
+            
+            document.getElementById('message').style.color = 'red'
+            document.getElementById('message').innerHTML = 'Invalid coupon...!'
+        }else{
+
+            document.getElementById('message').style.color = 'green'
+            document.getElementById('message').innerHTML = 'Coupon added successfully...!'
+            document.getElementById('totaldisp').innerHTML = result
+        }
+    }
+</script>

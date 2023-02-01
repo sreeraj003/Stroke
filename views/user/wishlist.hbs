@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3" style="height: 55.8vh;">
+        </div>
+        <div class="col-8 text-black">
+            {{#each userDatas}}
+            {{#each proData}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{thumb_image}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-body">
+                            <h3 class="card-title mt-0 text-dark mb-0"><strong>{{name}}</strong></h3>
+                            <h5 class="card-text  text-success mb-0">USD:{{price}}</h5>                        
+                        </div>
+                    </div>
+                    <div class="col-md-4 align-items-center text-center">
+                        <a href="/singleProduct?id={{_id}}"><button class="mt-1 mb-1 btn btn-primary pt-1" style="height: 30px;" type="submit" >View</button></a>
+                        <button type="button" class="btn btn-danger pt-1" data-bs-toggle="modal" style="height: 30px;" onclick="removeWishlist('{{_id}}')" data-bs-target="#exampleModal">Remove</button>             
+                         <form id="formId" class="mt-0" action="/addcartitem" method="post">      
+                            <input name="count" type="hidden" name="quantity" value="1" id="number">
+                            <input type="hidden" name="item_id" value="{{_id}}">
+                            <br>
+                            <button class=" btn btn-success pt-1" style="height: 30px;width: 100%;" type="submit" ><h6>Add to cart</h6></button>
+                        </form> 
+                    </div>
+                </div>
+               
+            </div>
+            {{/each}}
+            {{/each}}
+        </div>
+    </div>
+</div>
+<script>
+    function removeWishlist(data){
+        const id = data
+        fetch("/removeWishlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }
+</script>

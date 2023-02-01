@@ -1,0 +1,187 @@
+
+<div class="container">
+    <div class="row">
+        
+       
+        <div class="col-9">
+             {{#each productData}}
+             
+            <div class="card mb-3" style="height:160px" >
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img style="height:160px" src="{{this.product.thumb_image}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-4" style="height: 200px;">
+                        <div class="card-body p-1">
+                            <h3 class="card-title mt-0 text-dark mb-0"><strong>{{this.product.name}}</strong></h3>
+                            <h5 class="card-text   text-success mb-0" >USD:<h5 id="pro_{{product._id}}">{{this.product.price}}</h5></h5>
+                            <div class="mt-1 ">
+                                <form action="" id="formsub" method="post">
+                                    <button class="mb-1"type="button" onclick="decrease('{{product._id}}')" value="{{product._id}}">-</button>
+                                    <input class="mb-1 text-center" name="count"  type="text"  value="{{quantity}}" maxlength="2" min="1"  max="10" size="1" id="id_{{product._id}}">
+                                    <button class="mb-1"type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>          
+                                                           
+                                </form>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/singleProduct?id={{this.item}}"><button class="mt-3 mb-2 btn btn-sm btn-primary " type="submit" >View</button></a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="remomveCart('{{this.item}}')" data-bs-target="#exampleModal">Remove</button>                
+                    </div>
+                    
+                </div>
+            </div>
+            {{/each}}             
+        </div>
+       
+        <div class="col-3" style="word-break: break-all;" >
+            <div class="row" style="height: 200px;">
+                <div class="col-md-12 text-dark">
+                <h4 class="p-0 m-0">Default Address</h4>
+                    <b>House_no </b>:{{addressData.house_no}} <br>
+                    <b>Place </b>:{{addressData.place}} <br>
+                    <b>Town </b>:{{addressData.town}} <br>
+                    <b>City </b>:{{addressData.city}} <br>
+                    <b>Dist. </b>:{{addressData.dist}} <br>
+                    <b>State </b>:{{addressData.state}} <br>
+                    <b>Country </b>:{{addressData.country}} <br>
+                    <b>ZIP </b>:{{addressData.zip}} <br>
+                </div>  
+            
+                <div class="col-md-12" style="border-style: solid;border-width: 1px;">
+                    <div class=" ms-2 p-1" >
+                        <div class="row">
+                            <div class="col-7 my-auto">
+                                Total amount <br><h6 class="text-dark">USD:<b id="totalamount">{{total.[0].total}}</b>/-</h6> 
+                            </div>  
+                            <div class="col-5 mt-2 align-items-center justify-content-center">
+                                <button class="btn btn-success" onclick="document.getElementById('formsub').submit()">Proceed</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Remove Item?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to remove from cart...?
+                    <input type="hidden" id="cartID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmRemove()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+
+<script>
+function increase(data){
+ 
+    const ID = data
+    var value = parseInt(document.getElementById('id_'+data).value, 10);
+        value = isNaN(value) ? 0 : value;
+        if(value>=1){
+            value++;
+            if(value<=10){
+            document.getElementById('id_'+data).value = value; 
+            document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) + parseInt(document.getElementById('pro_'+data).innerHTML)
+ 
+    fetch("/increaseCartCount", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        id: ID
+      })
+  })
+  .then(response =>{ response.json()
+
+})
+  .then(data => {
+  
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+
+}
+        }
+ }
+function decrease(data){
+    const ID = data
+   var value = parseInt(document.getElementById('id_'+data ).value, 10);
+      value = isNaN(value) ? 1 : value;
+      if(value<=10){
+        value--;
+    if(value>=1){
+        document.getElementById('id_'+data).value = value;
+        document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) - parseInt(document.getElementById('pro_'+data).innerHTML)
+
+    fetch("/decreaseCartCount", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        id: ID
+      })
+  })
+  .then(response => {
+    response.json()
+    })
+    .then(data => {
+        
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+}
+}
+      }
+
+
+  function proceedorder(){
+    let qty = document.getElementById('cartQty').value
+    document.getElementById('formqty').value = qty
+    document.getElementById('proceedform').submit()
+  }
+
+  function remomveCart(data){
+    document.getElementById('cartID').value = data
+    console.log(data)
+  }
+  function confirmRemove(){
+    const id = document.getElementById('cartID').value
+    fetch("/removeCartItem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+</script>

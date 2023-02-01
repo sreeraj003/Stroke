@@ -1,0 +1,155 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+    <button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Logout
+    </button>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to Logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <div class="sidebar pe-4 pb-1 mt-5">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <h3 class="text-primary">Inventory</h3>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>    
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>  
+            </div>
+        </nav>
+    </div>
+
+    <div class="content">
+        <nav class="navbar  bg-light navbar-light px-4 py-0 mt-5">               
+            <div class="ms-auto me-4">
+                <a href="/admin/addProduct"><button style="background-color: blueviolet;border: 1px;color: aliceblue;border-radius: 10px;" type="button">Add new product</button></a>
+            </div>
+        </nav>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-12">
+                    <table id="myTable">
+                        <thead>
+                            <tr>
+                                <th>SL No</th>                            
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Brand</th>
+                                <th>price</th>
+                                <th>Stock</th>
+                                <th>Images</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each products}}
+                            <tr>     
+                                <td>{{num @index}}</td>                              
+                                <td>{{name}}</td>
+                                <td>
+                                    {{#each category}}
+                                    {{name}}
+                                    {{/each}}    
+                                </td>
+                                <td><div style="width: 300px;word-wrap: break-word;">{{description}}</div></td>
+                                <td>{{brand}}</td>
+                                <td>{{price}}</td>
+                                <td>{{stock}}</td>
+                                <td>
+                                    {{!-- {{#each image}} --}}
+                                    <img style="width: 100px;height: 100px;" src="/{{this.image.[0]}}" alt="{{this.image}}"><br><br>
+                                    {{!-- {{/each}} <hr>  --}}
+                                    </td>
+                                <td>
+                                    <a style="text-decoration: none;" href="/admin/editProduct?id={{this._id}}">
+                                    <button class="btn btn-info ">Edit</button>
+                                    </a>    
+                        
+                                    <button type="button" class="btn btn-danger mb-2 mt-2" data-bs-toggle="modal" onclick="deleteproduct('{{this._id}}')" data-bs-target="#exampleModal">Delete</button>                
+                            
+                                    {{!-- <form action="/admin/viewProduct?id={{this._id}}" method="post">
+                                    <button class=" btn btn-success" >view</button>
+                                    </form>       --}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>                  
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete product?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete this product...?
+                    <input type="hidden" id="productID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmDelete()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+<script>
+    function deleteproduct(data){
+        document.getElementById('productID').value = data
+    }
+    function confirmDelete(){
+        const id = document.getElementById('productID').value
+        fetch("/admin/deleteProduct", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }
+</script>

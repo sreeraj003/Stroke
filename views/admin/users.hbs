@@ -1,0 +1,194 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+    <button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Logout
+    </button>
+        <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to Logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+    <div class="sidebar pe-4 mt-5">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <a href="index.html" class="navbar-brand">
+                <h3 class="text-primary">Users</h3>
+            </a>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>   
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+            </div>
+        </nav>
+    </div>
+    <!-- Sidebar end -->
+
+    <div class="content mt-5">
+            <!-- Navbar Start -->
+            <nav class="navbar  bg-light navbar-light sticky-top">               
+                <div class="ms-auto ">
+                    .
+                </div>
+            </nav>
+            <!-- Navbar End -->
+  
+            <!-- Table Start -->
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <table style="width: 65vw!important;" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SL No</th>
+                                    <th>User_id</th>
+                                    <th>Name</th>
+                                    <th>Mobile</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each userData}}
+                                <tr>
+                                    <td>{{num @index}}</td>
+                                    <td>{{this._id}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.mobile}}</td>
+                                    <td>{{this.email}}</td>
+                                    <td>
+                                        {{#if this.is_blocked}}
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" onclick="unBlockUser('{{this._id}}')" data-bs-target="#unblockModal">Unblock</button>
+                                        {{else}}
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="blockUser('{{this._id}}')" data-bs-target="#exampleModal">Block</button>                
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>                  
+                </div>
+            </div>
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Block User?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to block this user...?
+                    <input type="hidden" id="userID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmBlock()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="unblockModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Unblock User?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to unblock this user...?
+                    <input type="hidden" id="userUnID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmUnBlock()" class="btn btn-warning">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+<script>
+    function blockUser(data){
+        document.getElementById("userID").value = data
+    }
+    function confirmBlock(){
+        const id = document.getElementById('userID').value
+        fetch("/admin/blockUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }
+
+    function unBlockUser(data){
+        document.getElementById("userUnID").value = data
+        console.log(data)
+    }
+    function confirmUnBlock(){
+        const id = document.getElementById('userUnID').value
+        fetch("/admin/unblockUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }
+</script>
+
+

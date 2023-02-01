@@ -1,0 +1,94 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+<button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to Logout?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4  mt-5">
+           <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+                <a href="index.html" class="navbar-brand">
+                    <h3 class="text-primary">Admin Dashboard</h3>
+                </a>
+                <div class="navbar-nav w-100">
+                    <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                    <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                    <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                    <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                    <a href="/admin/category" class="nav-item nav-link">Category</a>
+                    <a href="/admin/users" class="nav-item nav-link">users</a>
+                    <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+                    <a href="/admin/banners" class="nav-item nav-link">Banners</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+        
+
+        <!-- Content Start -->
+        <!-- Navbar start -->
+        <div class="content" style="min-height: 80vh;">
+            <nav class="navbar  bg-light navbar-light sticky-top px-4 py-0 mt-5" style="width: 60vw;">               
+                <div class="ms-auto me-4">
+                    .
+                </div>
+            </nav>
+            <!-- Navbar End -->
+            <!-- Sale & Revenue Start -->
+            <div class="container pt-4 px-4 mt-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3" style="width: 200px!important;">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Revenue</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3" style="width: 200px!important;">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-line fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Orders</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3" style="width: 200px!important;">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Products</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+        <!-- Content End -->
+    </div>

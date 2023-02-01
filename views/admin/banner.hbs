@@ -1,0 +1,83 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+<button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to Logout?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0" style="height:100vh;">
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3 mt-3">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <a href="index.html" class="navbar-brand">
+                <h3 class="text-primary">Banners</h3>
+            </a>
+            <div class="d-flex align-items-center"></div>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+                <a href="/admin/banners" class="nav-item nav-link">Banners</a>
+            </div>
+        </nav>
+    </div>
+            <div class="bg-light rounded d-flex  p-4 mt-3">
+                <div class="container">
+                    <div class="row">
+                        <div class=" col-md-12 mx-auto">
+                            <center> <button class=" stroke bg-light mb-2"><h2>STROKE</h2></button><br></center>
+                            <center><div>
+                                    {{#if categoryData}}
+                                    <p class="text-success">{{message}}</p>
+                                    {{else}}
+                                    <p class="text-danger">{{message}}</p>
+                                    {{/if}}
+                                    </div> 
+                        </div></center>
+                        <div class="col-md-6">
+                            <form class="row formcont " enctype="multipart/form-data" action="" method="POST">
+                                    <div class="col-md-12">
+                                    <label for="inputPassword4" class="form-label">Image</label>
+                                    <input type="file" name="image" class="form-control" style="width: 30vw;" id="inputPassword4">
+                                    </div>
+                                    <div class="col-md-12">
+                                    <br><button type="submit" class="btn btn-primary subButton">Add banner</button>
+                                    </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>{{#each bannerData}}
+                                <li>
+                                    <img src="{{this}}" alt="banner">
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+    </div>
+</div>

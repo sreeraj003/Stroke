@@ -1,0 +1,108 @@
+<div class="container">
+    <div class="row text-dark">
+        <div class="col-md-6">
+            <div style="border-style: solid;border-width: 1px;" class="p-3 text-dark">
+                <div class="row " style="word-wrap: break-word;">
+                    <div class="col-md-9" >
+                        <h3 class="pb-0 mb-0">Delivery To</h3>
+                    </div>
+                    <div class="col-md-3 ">
+                        <a href="/placeorders"><button class="btn btn-primary" style="font-size: 10px;">Change</button></a>
+                    </div>
+                    <p>{{addressData}}</p>
+                </div>
+            </div>
+            <h3>Choose payment option</h3>
+            <div style="border-style: solid;border-width: 1px;" class="p-3 text-dark">
+                <ul class="list-group">
+                    <li class="list-group-item"><button onclick=" document.getElementById('paypal-button-container').style.display = 'block';" id="onlinePay" name="Online" class="btn w-100 text-left">online</button></li>
+                    
+                    <li class="list-group-item"><button onclick="document.getElementById('proceed').style.display = 'block';" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div style="border-style: solid;border-width: 1px;" class="p-3 text-dark">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5>Bag Total</h5><hr>
+                        <h5>Shipping charge</h5><hr>
+                        <h5>Coupon Discount</h5><hr>
+                        <h5><b>Total Payable</b></h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Rs.{{#if totalamount}}{{totalamount}}{{else}}{{total}}{{/if}}/-</h5><hr>
+                        <h5 class="text-success">Free</h5><hr>
+                        <h5>Rs.{{discount}}/-</h5><hr>
+                        <h5><b>Rs.{{total}}/-</b></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-3 pt-2" style="word-wrap: break-word;">
+                <p class="text-success">Safe and secure payments. Easy returns. 100% Authentic products.We ensure all the transactions are safe and secure. </p>
+            </div>
+            <div>
+                <center>
+                    <form action="/success" method="post">
+                        <input type="hidden" id="address" name="address" value="{{addressData}}">
+                        <input type="hidden" id="total" name="total" value="{{total}}">
+                        <input type="hidden" id="coupon" name="coupon" value="{{code}}">
+                        <input type="hidden" id="discount" name="discount" value="{{discount}}">
+                        <input type="hidden" name="payment" value="Cash">
+                        <button class="btn btn-primary" type="submit" id="proceed" style="display: none;" >Proceed</button><br>
+                        <div id="paypal-button-container" style="display: none;" ></div>
+                    </form>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AbVDmFw_jtDc0ZYOCh6GMefB1mct4ambZCjEoWI3sfT7cn5N7Geg1xg3X10OQ-YYvl7ACXdf_9D5DqxH"></script>
+
+<script>
+    paypal.Buttons({
+      createOrder: (data, actions) => {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: document.getElementById('total').value, 
+            }
+          }]
+        });
+      },
+      // Finalize the transaction after payer approval
+      onApprove: (data, actions) => {
+        return actions.order.capture().then(function(orderData) {
+            const address = document.getElementById('address').value
+            const total = document.getElementById('total').value
+            const coupon = document.getElementById('coupon').value
+            const discount = document.getElementById('discount').value
+            const payment = document.getElementById('onlinePay').getAttribute('name')
+            return fetch("/success", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    address:address,
+                    total:total,
+                    coupon:coupon,
+                    discount:discount,
+                    payment:payment
+                })
+                })
+                .then(response => {
+                    return response.json
+                    })
+                .then(data=>{
+                    window.location.href='/success'
+                })
+                .catch(error => {
+                console.log(error);
+                });
+
+        });
+      }
+    }).render('#paypal-button-container');
+  </script>
