@@ -1,121 +1,195 @@
-<div class="container mt-5 mb-5">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-12">
-            <div class="card product-view-card col-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="images">
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+<button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Logout
+        </button>
 
-                                <div class="text-center col-12 zoom-image" data-image="/image/<%= product.image1  %>">
-                                     <img class="col-12" id="main-image" src="/images/<%= product.image1 %> " width="520" /> 
-                                </div>
-
-                                <div class="thumbnail text-center p-4"> 
-                                    <img onclick="change_image(this)" src="/images/<%= product.image1 %> " width="100"> 
-                                    <img onclick="change_image(this)" src="/images/<%= product.image2 %>" width="100"> 
-                                </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 ">
-                        <div class="product p-4 ">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center"><a href="/user_home" style="text-decoration: none; color: #6a6c6d;"><i class="fa fa-long-arrow-left"></i> <span class="ml-1">Back</span></a></div> <a href="/cart"><i class="fa fa-shopping-cart text-muted"></i></a>
-                            </div>
-                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand"><%= product.category %> </span>
-                                <h5 class="text-uppercase mb-5" style="font-size: 35px;"><%= product.productName %> </h5>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price" style="margin-right: 10px"><%= product.actualPrice %> </span>
-                                    <div class="ml-2"> <small class="dis-price" style="margin-right: 10px;"><%= product.discountedPrice %> </small> <span>40% Off</span></div>
-                                </div>
-                            </div>
-                            <p class="about"><%= product.description %> </p>
-                            <div class="sizes mt-5 mb-5">
-                            </div>
-                            <form action="/user_home/addToCart?id=<%= product._id %>&productView=true" method="post">
-                                <button type="submit" class="btn btn-outline-dark mb-5" style="width: 100%; margin-top: 10vw;">Add to cart</button>
-                            </form>
-                        </div>
-                    </div>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to Logout?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 mt-5">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <a href="index.html" class="navbar-brand ">
+                <h3 class="text-primary">Add Products</h3>
+            </a>
+            <div class="d-flex align-items-center ms-4"></div>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+            </div>
+        </nav>
+    </div>
+    <div class="bg-light rounded d-flex align-items-center justify-content-between mt-5">
+      <div class="container">
+        <div class="row">
+          <div class=" col-md-12 mx-auto">
+            <center> <button class=" stroke bg-light mt-2"><h2>STROKE</h2></button><br></center> <br>
+            <center><button class=" stroke bg-light mb-2">Edit Product</button></center>
+          </div>
+        <div class="col-md-6">
+          <form class="row" action="" enctype="multipart/form-data" method="POST">  
+            <div>
+              <p class="text-success">{{message}}</p>
+            </div>            
+            <div class="col-md-12">
+              <label for="inputName4" class="form-label">Product Name</label>
+              <input type="text" name="name" class="form-control"  value="{{ProductData.name}}" id="inputName4">
+            </div>                
+            <div class="col-md-12">
+              <br>
+              <select class="form-select" name="category"   aria-label="Default select example" id="category">
+                <option selected >{{ProductData.category}}</option>
+                {{#each categories}}
+                <option value="{{this.name}}">{{this.name}}</option>
+                {{/each}}
+              </select>
+            </div>
+              <br>
+              <div class="col-md-12">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" value="{{ProductData.description}}"  name="description" class="form-control" id="description">
+              </div>
+              <div class="col-md-12">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" min="1" value="{{ProductData.price}}"  name="price" class="form-control" id="price">
+              </div>
+              <div class="col-md-12">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" min="1" value="{{ProductData.stock}}"  name="stock" class="form-control" id="stock">
+              </div>
+              <div class="col-md-12">
+                <label for="brand" class="form-label">Brand</label>
+                <input type="text" value="{{ProductData.brand}}"  name="brand" class="form-control" id="brand">
+              </div>
+              <div class="col-md-12">
+                <label for="inputFile4" class="form-label">Image</label>
+                <input style="width: 300px;" multiple type="file"  name="image" class="form-control" id="inputFiled4">
+              </div><br>       
+              <div class="col-md-12">
+                <button class="btn btn-primary" id="sub">Update</button>
+              </div>
+              </form>
+            </div>
+          <div class="col-md-6">
+            <center>Images</center>
+            <div class="row">
+               {{#each ProductData.image}}
+              <div class="col-md-3">
+            <div class="card" style="width:7rem;">
+              <img src="/{{this}}" style="width: 6.9rem;height: 6.9rem;" class="card-img-top" alt="...">
+              <div class="card-body" style="width: 5rem;">
+                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="remove('{{this}}','{{../ProductData._id}}')" data-bs-target="#exampleModal">Remove</button> 
+              </div>
+            </div>
+           
+            </div>
+             {{/each}}
+            </div>
+          </div>
+        </div>
+           
+    </div>
+  </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete image?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete this image...?
+                    <input type="hidden" id="imageName">
+                    <input type="hidden" id="productId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="remove" class=" btn btn-danger">Yes</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div>                     
 </div>
-
-
 <script>
-    function change_image(image){
+  function remove(name,id){
+    document.getElementById('imageName').value = name
+    document.getElementById('productId').value = id
+  }
 
-    document.getElementById("main-image").src = image.src;
+
+  $('#remove').click(function () {
+    const imageName = document.getElementById('imageName').value
+    const productId = document.getElementById('productId').value
+  $.ajax({
+    type: 'POST',
+    url: '/admin/removeProductImage',
+    data: {
+       imageName: imageName,
+       productId: productId
+        },
+    success: function (data) {
+      // handle success
+      location.reload()
+    },
+    error: function (error) {
+      // handle error
+      console.error('Failed to add item to cart');
     }
-
-
-
-    document.addEventListener("DOMContentLoaded", function(event) {
-
-    });
-    // <//script>
-
-
-    // <script>
-        // Zoom images
-
-        // Add zoom-image class to the container of the image that you want to apply the zoom to.
-
-        jQuery(document).ready(function ($) {
-
-            $('.zoom-image img').click(function (event) {
-                var ix = $(this).offset().left;
-                var iy = $(this).offset().top;
-                console.log(ix + '-' + iy);
-
-                var mx = event.pageX;
-                var my = event.pageY;
-                console.log(mx + '-' + my);
-            })
-
-            $('.zoom-image img').hover(function () {
-
-                var img = $(this).attr('src');
-
-                $(this).after("<div class='hover-image' style='background-image: url(" + img + "); background-size: 300px;'></div>");
-
-                $(this).mousemove(function (event) {
-
-                    // Mouse Position
-                    var mx = event.pageX;
-                    var my = event.pageY;
-
-                    // Image Position
-                    var ix = $(this).offset().left;
-                    var iy = $(this).offset().top;
-
-                    // Mouse Position Relavtive to Image
-                    var x = mx - (ix);
-                    var y = my - (iy);
-
-                    // Image Height and Width
-                    var w = $(this).width();
-                    var h = $(this).height();
-
-                    // Mouse Position Relative to Image, in %
-                    var xp = (-x / w) * -100;
-                    var yp = (-y / h) * -100;
-
-                    $(this).parent().find('.hover-image').attr('style',
-
-                        "background-image: url(" + img + "); background-size: 1000px; background-repeat: no-repeat; background-position: " + xp + "% " + yp + "%; top: " + y + "px; left: " + x + "px;");
-
-                });
-
-            }, function () {
-
-                $(this).parent().find('.hover-image').remove();
-
-        });
-
+  });
+});
+  
+$('#sub').click(function () {
+  const name = document.getElementById('inputName4').value
+  const category = document.getElementById('category').value
+  const description = document.getElementById('description').value
+  const price = document.getElementById('productId').value
+  const stock = document.getElementById('productId').value
+  const brand = document.getElementById('brand').value
+  const productId = document.getElementById('productId').value
+  $.ajax({
+    type: 'POST',
+    url: '/admin/removeProductImage',
+    data: {
+       imageName: imageName,
+       productId: productId
+        },
+    success: function (data) {
+      // handle success
+      location.reload()
+    },
+    error: function (error) {
+      // handle error
+      console.error('Failed to add item to cart');
+    }
+  });
 });
 
+function imageAmount ()
+
 </script>
-
-
-<%- include('../layouts/foot.ejs') %>

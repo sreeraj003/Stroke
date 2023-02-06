@@ -79,7 +79,8 @@
                                     <td>{{../expire}}</td>
                                     <td>{{#if is_valid}}valid{{else}}Invalid{{/if}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="block('{{_id}}')" data-bs-target="#exampleModal">{{#if is_valid}}Block{{else}}{{/if}}</button>                
+                                        {{#if is_valid}}<button type="button" class="btn btn-danger" data-bs-toggle="modal" onclick="block('{{_id}}')" data-bs-target="#exampleModal">Block</button>{{else}}Expired{{/if}}               
+                                        {{!-- <button type="button" class="btn btn-warning" data-bs-toggle="modal" onclick="unBlock('{{_id}}')" data-bs-target="#unblockModal">{{#ifEquals is_valid false}}UnBlock{{else}}{{/if}}</button>                 --}}
                                        
                                     </td>
                                 </tr>
@@ -97,6 +98,26 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Delete coupon?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to block this coupon...?
+                    <input type="hidden" id="couponID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmBlock()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="unblockModal" style="" tabindex="10" aria-labelledby="unblockModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="unblockModalLabel">Unblock coupon?</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

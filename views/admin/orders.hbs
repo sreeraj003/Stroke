@@ -79,11 +79,11 @@
                                         <button id="changeStatus" class="btn btn-warning" type="button" onclick='return changeOrderStatus("{{_id}}")'>change</button></td>
                                         {{/if}}
                                     <td> 
-                                        <a href="/admin/viewOrder?id={{_id}}"><button  class="btn btn-primary">View</button></a>
+                                        <a href="/admin/viewOrder?id={{_id}}"><button  class="btn btn-primary mb-1">View</button></a>
 
                                         {{#if is_rejected }}
                                         {{else}}
-                                        <button type="button" class="btn btn-danger ms-auto" onclick="rejectButton('{{_id}}')" style="float: right;" data-bs-toggle="modal" data-bs-target="#RejectBut">
+                                        <button type="button" class="btn btn-danger" onclick="rejectButton('{{_id}}')"  data-bs-toggle="modal" data-bs-target="#RejectBut">
                                             Reject
                                         </button>
                                         {{/if}}

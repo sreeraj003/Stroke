@@ -15,10 +15,9 @@
             <h3>Choose payment option</h3>
             <div style="border-style: solid;border-width: 1px;" class="p-3 text-dark">
                 <ul class="list-group">
-                    <li class="list-group-item"><button onclick=" document.getElementById('paypal-button-container').style.display = 'block';" id="onlinePay" name="Online" class="btn w-100 text-left">online</button></li>                   
-                    <li class="list-group-item"><button onclick="document.getElementById('proceed').style.display = 'block';" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
-                    <li class="list-group-item"><button onclick="document.getElementById('wallet').style.display = 'block';" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
-                    
+                    <li class="list-group-item"><button onclick=" document.getElementById('paypal-button-container').style.display = 'block';document.getElementById('wallet').style.display = 'none';document.getElementById('proceed').style.display = 'none'" id="onlinePay" name="Online" class="btn w-100 text-left">online</button></li>                   
+                    <li class="list-group-item"><button onclick="document.getElementById('proceed').style.display = 'block';document.getElementById('paypal-button-container').style.display = 'none';document.getElementById('wallet').style.display = 'none'" name="Cash" id="cashPay" class="btn w-100 text-left">Cash on delivery</button></li>
+                    <li class="list-group-item"><button onclick="document.getElementById('wallet').style.display = 'block';document.getElementById('proceed').style.display = 'none';document.getElementById('paypal-button-container').style.display = 'none';" name="Cash" id="Wallet" class="btn w-100 text-left">Stroke Wallet</button></li>
                 </ul>
             </div>
         </div>
@@ -52,8 +51,14 @@
                         <input type="hidden" name="payment" value="Cash">
                         <button class="btn btn-primary" type="submit" id="proceed" style="display: none;" >Proceed</button><br>
                         <div id="paypal-button-container" style="display: none;" ></div>
-                        <div id="wallet"></div>
                     </form>
+                    <div id="wallet" style="display: none;">
+                            <h4>Stroke Wallet</h4>
+                            <div id="message" style="display: none;color: red;"></div>
+                            <h6>Balance:{{userData.wallet}}</h6> <br>
+                            <input type="hidden" id="walletBalance" value="{{userData.wallet}}">
+                            <button class="btn btn-success" id="walletPay">Pay</button>
+                    </div>
                 </center>
             </div>
         </div>
@@ -80,7 +85,7 @@
             const total = document.getElementById('total').value
             const coupon = document.getElementById('coupon').value
             const discount = document.getElementById('discount').value
-            const payment = document.getElementById('onlinePay').getAttribute('name')
+            const payment = 'online'
             return fetch("/success", {
                 method: "POST",
                 headers: {
@@ -107,4 +112,45 @@
         });
       }
     }).render('#paypal-button-container');
+  </script>
+  <script>
+    const button = document.getElementById('walletPay')
+    button.addEventListener('click',function(){
+        const Balance = parseInt(document.getElementById('walletBalance').value)
+        const address = document.getElementById('address').value
+        const total = parseInt(document.getElementById('total').value)
+        const coupon = document.getElementById('coupon').value
+        const discount = document.getElementById('discount').value
+        console.log(Balance,total,typeof(Balance))
+        const payment = 'wallet'
+     if((Balance-total)>0){
+        fetch("/success", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    address:address,
+                    total:total,
+                    coupon:coupon,
+                    discount:discount,
+                    payment:payment
+                })
+                })
+                .then(response => {
+                    return response.json
+                    })
+                .then(data=>{
+                    window.location.href='/success'
+                })
+                .catch(error => {
+                console.log(error);
+                });
+            }else{
+                document.getElementById('message').innerHTML = 'Insufficient balance'
+                document.getElementById('message').style.display = 'block'
+
+            }
+    })
+
   </script>

@@ -153,7 +153,6 @@ const deleteProduct = async (req,res,next)=>{
 const loadEditProduct = async (req,res,next)=>{
     try {
         const ProductData = await Product.find({_id:req.query.id}).lean()
-        console.log(ProductData);
         const categories = await Category.find({is_deleted:false}).lean()
         res.render('editProduct',{categories,ProductData:ProductData[0]})
     } catch (error) {
@@ -164,6 +163,11 @@ const loadEditProduct = async (req,res,next)=>{
 //edit product
 const editProduct = async (req,res,next)=>{
     try {
+        // const proData = await Product.findById({_id:req.query.id}).lean()
+        // if (req.files.length<(5-proData.image.length)) {
+        //     console.log(req.files.length);
+        // }
+        // console.log(proData);
         let imagesFilename = req.files.map(function (obj) {
             return obj.filename;
           });  
@@ -252,7 +256,7 @@ const deleteCategory = async(req,res,next)=>{
 //orders
 const loadOrders = async (req,res,next)=>{
     try {
-        const orderData = await Order.find().lean()
+        const orderData = await Order.find().sort({date:1}).lean()
         const orderDate = orderData.map((X) => {
             return moment(X.date).format("Do MMM YYYY");
         })

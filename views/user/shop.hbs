@@ -17,7 +17,7 @@
               {{else}}
               <div class="col-sm-6 col-lg-4 mb-5" style="width: 16.1rem" data-aos="fade-up">
                   <div class="card mb-3" style="width: 16.1rem; margin-top: -50px;">
-                  <a href="/singleProduct?id={{this._id}}"><img style="width: 16rem;height: 17rem;" src="{{thumb_image}}" class="card-img-top" alt="..."></a>
+                  <a href="/singleProduct?id={{this._id}}"><img style="width: 16rem;height: 17rem;" src="{{this.image.[0]}}" class="card-img-top" alt="..."></a>
                   <div class="card-body">
                     <h5 class="card-title"><a href="/singleProduct?id={{this._id}}">{{this.name}} by {{this.brand}}</a></h5>
                     <p class="card-text text-success">Rs.{{this.price}}/-</p>

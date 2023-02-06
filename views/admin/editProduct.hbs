@@ -87,10 +87,12 @@
               </div>
               <div class="col-md-12">
                 <label for="inputFile4" class="form-label">Image</label>
-                <input style="width: 300px;" multiple type="file"  name="image" class="form-control" id="inputFiled4">
+                <input style="width: 300px;" multiple type="file" onchange="imageAmount(this)"  name="image" class="form-control" id="inputFiled4">
+                <input type="hidden" id="imageArray" value="{{ProductData.image}}">
+                <div id="message" class="text-danger"></div>
               </div><br>       
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary subButton">Update</button>
+                <button type="submit" id="updateButton" class="btn btn-primary subButton">Update</button>
               </div>
               </form>
             </div>
@@ -164,4 +166,16 @@
   });
 });
 
+function imageAmount(data){
+  const img  = document.getElementById('imageArray').value
+  const imgArr = img.split(',').length
+  const remaining = 5-imgArr
+if(data.files.length <= remaining ){
+   document.getElementById('message').style.display = 'none'
+  document.getElementById('updateButton').style.display = 'block'
+}else{
+  document.getElementById('message').innerHTML = `Available image slot : ${remaining}.Delete images to add new`
+  document.getElementById('updateButton').style.display = 'none'
+}
+}
 </script>

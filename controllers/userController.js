@@ -536,7 +536,6 @@ const loadCart = async (req,res,next)=>{
         }
       }
     ])
-    console.log( total)
     const addressData = await Address.findOne({user:req.session.user_id}).lean()
     res.render('cart',{userData:userData,productData,total,addressData})
   } catch (error) {
@@ -556,10 +555,13 @@ const addCartItem = async (req,res,next)=>{
       })
       if (cart==-1) {
         const cartItem = await User.findByIdAndUpdate({_id:req.session.user_id},{$addToSet:{cart:{item_id:itemId,count:number,}}})
+        // res.json("done")
       }else{
         const cartItem = await User.updateOne({_id:req.session.user_id,'cart.item_id':ObjectId(req.body.item_id)},{$inc:{'cart.$.count':parseInt(req.body.count)}})
+        // res.json("done")
       }
       res.render('shop-single',{Item,userData})
+      // res.json("done")
   } catch (error) {
     next(error);
   }
@@ -747,49 +749,60 @@ const success = async (req,res,next)=>{
       for (let i = 0; i < priceData.length; i++) {
         const element = await Product.findByIdAndUpdate({_id:product[i]._id},{$inc:{stock:-purchaseQuantity[i]}});
         const removeItem = await User.updateOne({_id:req.session.user_id},{"$pull": { "cart": { "item_id": productName[i]._id} }}, { safe: true, multi:true });
+      }        
+      console.log(req.body.payment);
+          if (req.body.coupon) {
+              const order = new Order({
+              id:req.session.user_id,
+              date:moment(Date.now()).format('Do MMM YYYY'),
+              user:userData.name,
+              address:req.body.address,
+              product:productName,
+              quantity:purchaseQuantity,
+              price:priceData,
+              status:'ordered',
+              amount:totalcost,
+              payment:req.body.payment,
+              total:req.body.total,
+              coupon:req.body.coupon,
+              discount:req.body.discount,
+            })
+            const orderData = await order.save()
+            const couponUpdate = await Coupon.findOneAndUpdate({code:req.body.coupon},{$set:{is_valid:false}})
 
-      }
-      if (req.body.coupon) {
-          const order = new Order({
-          id:req.session.user_id,
-          date:moment(Date.now()).format('Do MMM YYYY'),
-          user:userData.name,
-          address:req.body.address,
-          product:productName,
-          quantity:purchaseQuantity,
-          price:priceData,
-          status:'ordered',
-          amount:totalcost,
-          payment:req.body.payment,
-          total:req.body.total,
-          coupon:req.body.coupon,
-          discount:req.body.discount
-        })
-        const orderData = await order.save()
-        const couponUpdate = await Coupon.findOneAndUpdate({code:req.body.coupon},{$set:{is_valid:false}})
-      }else{
-        const order = new Order({
-          id:req.session.user_id,
-          date:moment(Date.now()).format('Do MMM YYYY'),
-          user:userData.name,
-          address:req.body.address,
-          product:productName,
-          quantity:purchaseQuantity,
-          price:priceData,
-          status:'ordered',
-          amount:totalcost,
-          payment:req.body.payment,
-          total:req.body.total
+          }else{
 
-        })
-        const orderData = await order.save()
-      }
-      if (req.body.payment == 'online') {
-        res.json('ok')
-      }else{
-        const userData = await User.findById({_id:req.session.user_id}).lean()
-          res.render('success',userData)
-      }
+            const order = new Order({
+              id:req.session.user_id,
+              // date:moment(Date.now()).format('Do MMM YYYY'),
+              date:moment(Date.now()).add(10, 'days').calendar(),
+              user:userData.name,
+              address:req.body.address,
+              product:productName,
+              quantity:purchaseQuantity,
+              price:priceData,
+              status:'ordered',
+              amount:totalcost,
+              payment:req.body.payment,
+              total:req.body.total
+
+            })
+            const orderData = await order.save()
+          }
+          if (req.body.payment == 'wallet') {
+            const walletUpdate = await User.findByIdAndUpdate({_id:req.session.user_id},{$inc:{wallet:-req.body.total}})
+          }
+        if (req.body.payment == 'online') {
+          console.log(2);
+          res.json('ok')
+        }else if(req.body.payment == 'wallet'){
+          console.log(1);
+          res.json('done')
+        }else{
+          const userData = await User.findById({_id:req.session.user_id}).lean()
+          console.log(3);
+            res.render('success',userData)
+          }
   } catch (error) {
     next(error);
   }

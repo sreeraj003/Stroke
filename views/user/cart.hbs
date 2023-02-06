@@ -100,7 +100,6 @@ function increase(data){
             if(value<=10){
             document.getElementById('id_'+data).value = value; 
             document.getElementById('totalamount').innerHTML = parseInt(document.getElementById('totalamount').innerHTML) + parseInt(document.getElementById('pro_'+data).innerHTML)
-
             $.ajax({
                 type:'POST',
                 url:'/increaseCartCount',
@@ -114,10 +113,6 @@ function increase(data){
         }
  }
 }
-
-
-
-
 
 function decrease(data){
     const ID = data
