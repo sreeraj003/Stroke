@@ -14,6 +14,8 @@ const Coupon = require('../models/couponModel');
 const ReturnD = require('../models/returnModel')
 const exphbs  = require('express-handlebars');
 const hbs = exphbs.create({});
+const easyinvoice = require('easyinvoice')
+const fs = require('fs')
 
 hbs.handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
@@ -676,24 +678,35 @@ const proceedToPay = async(req,res,next)=>{
             const addressData=req.body.address
             const totalamount = parseInt(req.body.total)
             const discount = (totalamount*couponData[0].discount/100)
-            const total = totalamount-discount
-            res.render('payment',{addressData,userData,total,totalamount,discount,code})
+            const Total = totalamount-discount
+            const tax = Total*0.18
+            const total = Total+tax
+            res.render('payment',{addressData,userData,total,totalamount,discount,code,tax})
           }else{
             const addressData=req.body.address
             const totalamount = parseInt(req.body.total)
-            const total = totalamount
-            res.render('payment',{addressData,userData,total,totalamount,discount:0})
+            console.log(totalamount);
+            const Total = totalamount
+            const tax = Total*0.18
+            const total = Total+tax
+            res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
           }
          
         }else{
           const addressData = req.body.address
-          const total = req.body.total
-          res.render('payment',{addressData,userData,total,discount:0}) 
+          const totalamount = parseInt(req.body.total)
+          const Total = parseInt(req.body.total)
+          const tax = Total*0.18
+            const total = Total+tax
+          res.render('payment',{addressData,userData,total,totalamount,discount:0,tax}) 
         }
         }else{
           const addressData = req.body.address
-          const total = req.body.total
-          res.render('payment',{addressData,userData,total,discount:0})
+          const totalamount = parseInt(req.body.total)
+          const Total = parseInt(req.body.total)
+          const tax = Total*0.18
+            const total = Total+tax
+          res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
         }
   
     
@@ -764,18 +777,19 @@ const success = async (req,res,next)=>{
               amount:totalcost,
               payment:req.body.payment,
               total:req.body.total,
+              tax:parseInt(req.body.tax),
               coupon:req.body.coupon,
               discount:req.body.discount,
             })
             const orderData = await order.save()
-            const couponUpdate = await Coupon.findOneAndUpdate({code:req.body.coupon},{$set:{is_valid:false}})
-
+            console.log(req.body.coupon);
+            await User.findByIdAndUpdate({_id:ObjectId(req.session.user_id)},{$push:{coupons:req.body.coupon}})
           }else{
 
             const order = new Order({
               id:req.session.user_id,
-              // date:moment(Date.now()).format('Do MMM YYYY'),
-              date:moment(Date.now()).add(10, 'days').calendar(),
+              date:moment(Date.now()).format('Do MMM YYYY'),
+              // date:moment(Date.now()).add(10, 'days').calendar(),
               user:userData.name,
               address:req.body.address,
               product:productName,
@@ -784,10 +798,13 @@ const success = async (req,res,next)=>{
               status:'ordered',
               amount:totalcost,
               payment:req.body.payment,
+              tax:parseInt(req.body.tax),
               total:req.body.total
 
             })
             const orderData = await order.save()
+            
+           
           }
           if (req.body.payment == 'wallet') {
             const walletUpdate = await User.findByIdAndUpdate({_id:req.session.user_id},{$inc:{wallet:-req.body.total}})
@@ -801,8 +818,14 @@ const success = async (req,res,next)=>{
         }else{
           const userData = await User.findById({_id:req.session.user_id}).lean()
           console.log(3);
-            res.render('success',userData)
-          }
+          res.render('success',userData)
+        }
+        const today = new Date();
+        console.log(today);
+        const due = new Date(today)
+        const dueDate = due.setDate(today.getDate()+7)
+        console.log(dueDate);
+
   } catch (error) {
     next(error);
   }
@@ -811,7 +834,7 @@ const success = async (req,res,next)=>{
 //successLoad
 const successLoad = async(req,res,next)=>{
   try {
-    const userData = await User.findById({_id:req.session.user_id}).lean()
+    const userData = await User.findById({_id:ObjectId(req.session.user_id)}).lean()
     res.render('success',{userData})
   } catch (error) {
     next(error)
@@ -824,7 +847,6 @@ const orders = async(req,res,next)=>{
   try {
     const userData = await User.findById({_id:req.session.user_id}).lean()
     const orderData = await Order.find({id:req.session.user_id}).sort({date:-1}).lean()
-   
     res.render('orders',{userData,orderData})
   } catch (error) {
     next(error);
@@ -919,14 +941,25 @@ const searchProduct = async (req,res,next)=>{
 //check Coupon
 const checkCoupon = async(req,res,next)=>{
   try {
+    const userData = await User.findById({_id:req.session.user_id}).lean()
+    console.log(userData)
+    const coup = userData.coupons
     const code= req.body.code
     const total = req.body.total
+    console.log(coup);
     const couponData = await Coupon.find({code:code})
     if (couponData!='') {
       if (couponData[0].is_valid==true) {
-        const CouponDiscount = await Coupon.findOne({code:code}).lean()
-        const discounted = total-(total*CouponDiscount.discount/100)
-        res.json(discounted)
+        const checkUsed = coup.map((x)=>{return x == req.body.code})
+        console.log(checkUsed);
+        if (checkUsed=='') {
+          const CouponDiscount = await Coupon.findOne({code:code}).lean()
+          const discounted = total-(total*CouponDiscount.discount/100)
+          res.json(discounted)
+          }else{
+            res.json('invalid')
+          }
+        
       }else{
         res.json('invalid')
       }

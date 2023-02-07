@@ -48,6 +48,9 @@ const orderSchema = mongoose.Schema({
     payment:{
         type:String
     },
+    tax:{
+       type:Number
+    },
     status:{
         type:String
     },

@@ -7,6 +7,7 @@ const Order = require('../models/orderModel')
 const ObjectId = require('mongoose').Types.ObjectId
 const Coupon = require('../models/couponModel')
 const ReturnD = require('../models/returnModel')
+// import easyinvoice from 'easyinvoice';
 const exphbs  = require('express-handlebars');
 const hbs = exphbs.create({});
 hbs.handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
@@ -56,7 +57,7 @@ const verifyLogin = async(req,res,next)=>{
 const loadDashboard = async(req,res,next)=>{
     try {
         if(req.session.admin){
-        res.render('dashboard')
+            res.render('dashboard')
         }else{
             res.redirect('/admin/login')
         }

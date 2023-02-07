@@ -28,12 +28,14 @@
                         <h5>Bag Total</h5><hr>
                         <h5>Shipping charge</h5><hr>
                         <h5>Coupon Discount</h5><hr>
+                        <h4>Tax</h4>
                         <h5><b>Total Payable</b></h5>
                     </div>
                     <div class="col-md-4">
                         <h5>Rs.{{#if totalamount}}{{totalamount}}{{else}}{{total}}{{/if}}/-</h5><hr>
                         <h5 class="text-success">Free</h5><hr>
                         <h5>Rs.{{discount}}/-</h5><hr>
+                        <h4>Rs.{{tax}}</h4>
                         <h5><b>Rs.{{total}}/-</b></h5>
                     </div>
                 </div>
@@ -46,6 +48,7 @@
                     <form action="/success" method="post">
                         <input type="hidden" id="address" name="address" value="{{addressData}}">
                         <input type="hidden" id="total" name="total" value="{{total}}">
+                        <input type="hidden" id="tax" name="tax" value="{{tax}}">
                         <input type="hidden" id="coupon" name="coupon" value="{{code}}">
                         <input type="hidden" id="discount" name="discount" value="{{discount}}">
                         <input type="hidden" name="payment" value="Cash">
@@ -83,6 +86,7 @@
         return actions.order.capture().then(function(orderData) {
             const address = document.getElementById('address').value
             const total = document.getElementById('total').value
+            const tax = document.getElementById('tax').value
             const coupon = document.getElementById('coupon').value
             const discount = document.getElementById('discount').value
             const payment = 'online'
@@ -94,6 +98,7 @@
                 body: JSON.stringify({
                     address:address,
                     total:total,
+                    tax:tax,
                     coupon:coupon,
                     discount:discount,
                     payment:payment
