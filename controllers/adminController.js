@@ -454,6 +454,164 @@ const removeProductImage = async (req,res,next)=>{
     }
 }
 
+//salesData
+const salesData = async(req,res,next)=>{
+    try {
+        const countArray = []
+        const cancelCount = []
+        const orderData = await Order.find().lean()
+        const categories = await Category.find().lean()
+        const categoryData = categories.map((el)=>{
+            return el.name
+        })
+        let count = 0
+        let canCount = 0
+        for (let i = 0; i < categories.length; i++) {
+            for (let j = 0; j < orderData.length; j++) {
+                   let ind = orderData[j].product.findIndex((x,el)=>{
+                        return x.category == categoryData[i]
+                    }) 
+                    if (orderData[j].is_rejected==0) {
+                        if (ind!=-1) {
+                            count = count+parseInt(orderData[j].quantity[ind])  
+                        }
+                    }else{
+                        if (ind!=-1) {
+                            canCount = canCount+parseInt(orderData[j].quantity[ind])  
+                            
+                        }
+                    }
+                }
+                countArray.push(count)  
+                cancelCount.push(canCount)
+                canCount=0
+                count=0
+            }
+            const data = {
+                category:categoryData,
+                count:countArray,
+                cancel:cancelCount
+            }
+        res.json(data)
+    } catch (error) {
+        next(error)
+    }
+}
+//timeSearch
+const timeSearch = async(req,res,next)=>{
+    try {
+        const from = req.body.from
+        const to =req.body.to
+        const timestamp = Date.parse(from);
+        const fromdate = new Date(timestamp);
+        const toTime = Date.parse(to)
+        const todate = new Date(toTime)
+        console.log(todate);
+        const countArray = []
+        const cancelCount = []
+        let orderData = await Order.find().lean()
+        
+        orderData = orderData.filter((obj)=>{
+           return(new Date(obj.date)>=fromdate && new Date(obj.date)<=todate)
+        //    
+        })
+        console.log(orderData)
+        const categories = await Category.find().lean()
+        const categoryData = categories.map((el)=>{
+            return el.name
+        })
+        let count = 0
+        let canCount = 0
+        for (let i = 0; i < categories.length; i++) {
+            for (let j = 0; j < orderData.length; j++) {
+                   let ind = orderData[j].product.findIndex((x,el)=>{
+                        return x.category == categoryData[i]
+                    }) 
+                    if (orderData[j].is_rejected==0) {
+                        if (ind!=-1) {
+                            count = count+parseInt(orderData[j].quantity[ind])  
+                        }
+                    }else{
+                        if (ind!=-1) {
+                            canCount = canCount+parseInt(orderData[j].quantity[ind])  
+                            
+                        }
+                    }
+                }
+                countArray.push(count)  
+                cancelCount.push(canCount)
+                canCount=0
+                count=0
+            }
+            const data = {
+                category:categoryData,
+                count:countArray,
+                cancel:cancelCount
+            }
+
+        res.json(data)
+    } catch (error) {
+        next(error)
+    }
+}
+
+//loadSalesReport
+const loadSalesReport = async(req,res,next)=>{
+    try {
+        
+        const salesData = await Order.find({is_rejected:0}).lean()        
+        const groupedData = {};
+        const gross = 0
+        console.log(salesData);
+        salesData.forEach(item => {
+        const date = item.date;
+        if (!groupedData[date]) {
+            groupedData[date] = [];
+        }
+        groupedData[date].push(item);
+        });
+        // const keyVal = groupedData.keys()
+        console.log(groupedData);
+        res.render('salesReport',{groupedData})
+    } catch (error) {
+        next(error)
+    }
+}
+
+//loadSearchSalesReport
+const loadSearchSalesReport = async(req,res,next)=>{
+    try {
+        console.log(req.body);
+        let salesData = await Order.find({is_rejected:0}).lean()   
+        const from = req.body.fromDate
+            const to =req.body.toDate
+            const timestamp = Date.parse(from);
+            const fromdate = new Date(timestamp);
+            const toTime = Date.parse(to)
+            const todate = new Date(toTime)
+            console.log(fromdate);
+            console.log(typeof(fromdate));
+            salesData = salesData.filter((obj)=>{
+                return(new Date(obj.date)>=fromdate)
+            })
+            console.log(salesData);
+            const groupedData = {};
+            const gross = 0
+
+            salesData.forEach(item => {
+            const date = item.date;
+            if (!groupedData[date]) {
+                groupedData[date] = [];
+            }
+            groupedData[date].push(item);
+            });
+            console.log(groupedData);
+            res.render('salesReport',{groupedData})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     loadLogin,
     verifyLogin,
@@ -484,5 +642,9 @@ module.exports = {
     productReturn,
     acceptReturn,
     rejectReturn,
-    removeProductImage
+    removeProductImage,
+    salesData,
+    timeSearch,
+    loadSalesReport,
+    loadSearchSalesReport
 }

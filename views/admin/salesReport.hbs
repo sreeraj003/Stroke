@@ -1,0 +1,98 @@
+<div class="bg-light  px-4 py-0" style="width:90vw;margin-top: -50px;">
+    <button type="button" class="btn btn-success ms-auto" style="float: right;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Logout
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to Logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="/admin/logout"><button type="button" class="btn btn-danger">Logout</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <div class="sidebar pe-4 mt-5">
+        <nav class=" bg-light" style="width: 300px!important; text-align: center; font-size: 15px;">
+            <a href="index.html" class="navbar-brand">
+                <h3 class="text-primary">Category</h3>
+            </a>
+            <div class="navbar-nav w-100">
+                <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/inventory" class="nav-item nav-link">Inventory</a>
+                <a href="/admin/order" class="nav-item nav-link">Orders</a>
+                <a href="/admin/salesreport" class="nav-item nav-link">Sales Report</a>
+                <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
+                <a href="/admin/category" class="nav-item nav-link">Categories</a>
+                <a href="/admin/users" class="nav-item nav-link">users</a>          
+                <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>  
+            </div>
+        </nav>
+    </div>
+    
+    <div class="mt-3" >
+        <nav class="navbar  bg-light navbar-light sticky-top px-4 py-0">
+            <div class="ms-auto">
+                .
+            </div>
+        </nav>
+        <div class="mt-2 ms-2">
+            <form action="/admin/periodSales" method="post">
+                <center>
+                    <label for="From">From&nbsp;</label>:&nbsp;<input type="date" name="fromDate" id="fromDate">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="To">To&nbsp;</label>:&nbsp;<input type="date" name="toDate" id="toDate">
+                    <button id="timesearch" class="btn btn-warning m-0 pt-0" style="height: 26px;margin-left: 20px;!important">seach</button>
+                </center>
+            </form>
+        </div>
+    <table id="myTable" style="width: 1000px;">
+        <thead>
+            <tr>
+                <th>Order Id</th>
+                <th>Date</th>
+                <th>Products</th>
+                <th>price</th>
+                <th>Quantity</th>
+                <th>total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each groupedData}}
+            {{#each this}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.date}} <br></td>
+                <td>{{#each this.product}}{{this.name}}&nbsp;{{this.category}} <br> {{/each}}</td>
+                <td>{{#each this.product}}{{this.price}} <br> {{/each}}</td>
+                <td>{{#each this.quantity}}{{this}} <br> {{/each}}</td>
+                <td>{{#each this.amount}}{{this}} <br> {{/each}}</td>
+            </tr>
+            {{/each}}
+            {{/each}}
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+    } );
+} );
+</script>

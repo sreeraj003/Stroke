@@ -124,6 +124,7 @@
         const Balance = parseInt(document.getElementById('walletBalance').value)
         const address = document.getElementById('address').value
         const total = parseInt(document.getElementById('total').value)
+        const tax = document.getElementById('tax').value
         const coupon = document.getElementById('coupon').value
         const discount = document.getElementById('discount').value
         console.log(Balance,total,typeof(Balance))
@@ -139,7 +140,8 @@
                     total:total,
                     coupon:coupon,
                     discount:discount,
-                    payment:payment
+                    payment:payment,
+                    tax:tax
                 })
                 })
                 .then(response => {

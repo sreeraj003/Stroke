@@ -8,6 +8,7 @@ const auth = require('../middleware/auth')
 const upload = require('../middleware/multer')
 const Coupon = require('../models/couponModel')
 const cron = require('node-cron');
+const adminModel = require('../models/adminModel');
 
 admin_route.set('views','./views/admin')
 
@@ -62,6 +63,8 @@ admin_route.get('/returnProd',auth.isAdminLogin,adminController.productReturn)
 admin_route.post('/acceptReturn',auth.isAdminLogin,adminController.acceptReturn)
 admin_route.post('/rejectReturn',auth.isAdminLogin,adminController.rejectReturn)
 admin_route.post('/removeProductImage',auth.isAdminLogin,adminController.removeProductImage)
-
-
+admin_route.get('/sales',auth.isAdminLogin,adminController.salesData)
+admin_route.post('/timeSearch',auth.isAdminLogin,adminController.timeSearch)
+admin_route.get('/salesreport',auth.isAdminLogin,adminController.loadSalesReport)
+admin_route.post('/periodSales',auth.isAdminLogin,adminController.loadSearchSalesReport)
 module.exports = admin_route

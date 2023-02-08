@@ -742,10 +742,10 @@ const success = async (req,res,next)=>{
       }
     ])
 
-     
+     console.log(productData);
     const product = productData.map((x)=>{
-      return x.product;})
-
+      return x.product})
+console.log(product);
     const productName = product.map((x)=>{
       return x
     })
@@ -764,10 +764,11 @@ const success = async (req,res,next)=>{
         const removeItem = await User.updateOne({_id:req.session.user_id},{"$pull": { "cart": { "item_id": productName[i]._id} }}, { safe: true, multi:true });
       }        
       console.log(req.body.payment);
+      console.log(typeof(req.body.tax));
           if (req.body.coupon) {
               const order = new Order({
               id:req.session.user_id,
-              date:moment(Date.now()).format('Do MMM YYYY'),
+              date:moment(Date.now()).format('l'),
               user:userData.name,
               address:req.body.address,
               product:productName,
@@ -781,14 +782,14 @@ const success = async (req,res,next)=>{
               coupon:req.body.coupon,
               discount:req.body.discount,
             })
+            
             const orderData = await order.save()
-            console.log(req.body.coupon);
             await User.findByIdAndUpdate({_id:ObjectId(req.session.user_id)},{$push:{coupons:req.body.coupon}})
           }else{
 
             const order = new Order({
               id:req.session.user_id,
-              date:moment(Date.now()).format('Do MMM YYYY'),
+              date:moment(Date.now()).format('l'),
               // date:moment(Date.now()).add(10, 'days').calendar(),
               user:userData.name,
               address:req.body.address,
@@ -803,7 +804,6 @@ const success = async (req,res,next)=>{
 
             })
             const orderData = await order.save()
-            
            
           }
           if (req.body.payment == 'wallet') {
