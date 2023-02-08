@@ -679,16 +679,16 @@ const proceedToPay = async(req,res,next)=>{
             const totalamount = parseInt(req.body.total)
             const discount = (totalamount*couponData[0].discount/100)
             const Total = totalamount-discount
-            const tax = Total*0.18
-            const total = Total+tax
+            const tax = (Total*0.18)
+            const total = (Total+tax).toFixed(2)
             res.render('payment',{addressData,userData,total,totalamount,discount,code,tax})
           }else{
             const addressData=req.body.address
             const totalamount = parseInt(req.body.total)
             console.log(totalamount);
             const Total = totalamount
-            const tax = Total*0.18
-            const total = Total+tax
+            const tax = (Total*0.18)
+            const total = (Total+tax).toFixed(2)
             res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
           }
          
@@ -696,16 +696,16 @@ const proceedToPay = async(req,res,next)=>{
           const addressData = req.body.address
           const totalamount = parseInt(req.body.total)
           const Total = parseInt(req.body.total)
-          const tax = Total*0.18
-            const total = Total+tax
+          const tax = (Total*0.18)
+            const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax}) 
         }
         }else{
           const addressData = req.body.address
           const totalamount = parseInt(req.body.total)
           const Total = parseInt(req.body.total)
-          const tax = Total*0.18
-            const total = Total+tax
+          const tax = (Total*0.18)
+            const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
         }
   
@@ -941,18 +941,23 @@ const searchProduct = async (req,res,next)=>{
 //check Coupon
 const checkCoupon = async(req,res,next)=>{
   try {
+    console.log(req.body.code);
     const userData = await User.findById({_id:req.session.user_id}).lean()
     console.log(userData)
+    console.log('1');
     const coup = userData.coupons
     const code= req.body.code
     const total = req.body.total
-    console.log(coup);
     const couponData = await Coupon.find({code:code})
     if (couponData!='') {
+      console.log('2');
       if (couponData[0].is_valid==true) {
-        const checkUsed = coup.map((x)=>{return x == req.body.code})
+        console.log('3');
+        const checkUsed = coup.findIndex((x)=>{return x == req.body.code})
+
         console.log(checkUsed);
-        if (checkUsed=='') {
+        if (checkUsed==-1) {
+          console.log('4');
           const CouponDiscount = await Coupon.findOne({code:code}).lean()
           const discounted = total-(total*CouponDiscount.discount/100)
           res.json(discounted)
