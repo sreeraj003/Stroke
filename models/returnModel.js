@@ -1,6 +1,10 @@
 const mongoose = require ('mongoose')
 
 const returnSchema = mongoose.Schema({
+    date:{
+        type:Date,
+        required:true
+    },
     order:{
         type:mongoose.Types.ObjectId,
         required:true

@@ -16,7 +16,7 @@
                             <h3 class="card-title mt-0 text-dark mb-0"><strong>{{this.product.name}}</strong></h3>
                             <h5 class="card-text   text-success mb-0" >USD:<h5 id="pro_{{product._id}}">{{this.product.price}}</h5></h5>
                             <div class="mt-1 ">
-                                <form action="" id="formsub" method="post">
+                                <form action="/proceedCheckout" id="formsub" method="get">
                                     <button class="mb-1"type="button" onclick="decrease('{{product._id}}')" value="{{product._id}}">-</button>
                                     <input class="mb-1 text-center" name="count"  type="text"  value="{{quantity}}" maxlength="2" min="1"  max="10" size="1" id="id_{{product._id}}">
                                     <button class="mb-1"type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>                                    
@@ -38,19 +38,7 @@
         </div>
        
         <div class="col-3" style="word-break: break-all;" >
-            <div class="row" style="height: 200px;">
-                <div class="col-md-12 text-dark">
-                <h4 class="p-0 m-0">Default Address</h4>
-                    <b>House_no </b>:{{addressData.house_no}} <br>
-                    <b>Place </b>:{{addressData.place}} <br>
-                    <b>Town </b>:{{addressData.town}} <br>
-                    <b>City </b>:{{addressData.city}} <br>
-                    <b>Dist. </b>:{{addressData.dist}} <br>
-                    <b>State </b>:{{addressData.state}} <br>
-                    <b>Country </b>:{{addressData.country}} <br>
-                    <b>ZIP </b>:{{addressData.zip}} <br>
-                </div>  
-            
+            <div class="row" >            
                 <div class="col-md-12" style="border-style: solid;border-width: 1px;">
                     <div class=" ms-2 p-1" >
                         <div class="row">

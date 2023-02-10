@@ -1,0 +1,91 @@
+<div class="container" >
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12 text-center">
+            <h4>Hello {{userData.name}}</h4>
+            </div>
+            <div class="col-12 bg-light align-items-center text-center">
+                <a href="/profile" style="color: black;">My profile</a><br>
+                <a href="/orders" style="color: black;">My Orders</a><br>
+                <a href="/address" style="color: rgb(129, 0, 139);">My Address</a><br>
+                <a href="/editProfile" style="color: black;">Edit Profile</a><br>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-dark"><strong>Return Product details</strong></h3>
+            <div class="form-floating">
+                <form class="row" action="" method="post">
+                <div class="col-12">
+                    <label for="inputorderID" class="form-label">Order Id</label>
+                    <input type="text" class="form-control"  name="orderId" id="inputorderID" placeholder="Enter the order Id here">
+                </div>
+                <div class="col-12">
+                    <label for="inputProduct" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" name="Product" id="inputProduct" placeholder="Apartment, studio, or floor">
+                </div>
+                <div class="col-md-12">
+                    <label for="inputReturnReason" class="form-label">Reason for Return</label>
+                    <input type="text" name="reason"  class="form-control"  id="inputProduct" placeholder="Enter the reason for return">
+                </div>
+                <div class="col-12">
+                    <br>
+                </div>
+                </form>
+                <center><button id="returnbutton" class="btn btn-info">Submit</button></center>
+                {{!-- <input type="hidden" name="user_id" value="{{addressData._id}}"> --}}
+                <br>
+                {{!-- <button type="submit" class="btn btn-info">Submit</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-2">
+    <div class="modal fade mt-5" style="margin-top: 30vh!important;" id="exampleModal" style="" tabindex="10" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Address?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete this address...?
+                    <input type="hidden" id="addressID">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" onclick="confirmDelete()" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>                     
+</div>
+<script>
+    const button = document.getElementById('returnbutton')
+    button.addEventListener("click",function(){
+        const orderId = document.getElementById('orderId').value
+        const Product = document.getElementById('Product').value
+        const reason = document.getElementById('reason').value
+
+        fetch("/returnOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        orderId:orderId,
+        Product:Product,
+        reason:reason
+      })
+    })
+    .then(response => {
+        $('#Reject').modal('hide')
+        response.json
+        })
+    .then(data=>{
+        location.reload()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    })
+</script>

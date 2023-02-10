@@ -38,36 +38,63 @@
                             <a href="/admin/coupons" class="nav-item nav-link">Coupons</a>
                             <a href="/admin/category" class="nav-item nav-link">Categories</a>
                             <a href="/admin/users" class="nav-item nav-link">users</a> 
-                            <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a>
+                            {{!-- <a href="/admin/returnProd" class="nav-item nav-link">ReturnProduct</a> --}}
                         </div>
                     </nav>
                 </div>
             </div>
-            <div class="col-md-8 ms-3 text-dark  mt-5 p-5" style="border: 1px;border-style: solid;">
-                <b> Date of order:</b>{{orderData.date}} <br>
-                <b>Delivery Address:</b>{{orderData.address}} <br>
-                <b>Payment Method:</b>{{orderData.payment}} <br>
-                <b>Status:</b>{{#if orderData.is_rejected}} <p class="text-danger">Cancelled</p>{{else}} <p class="text-success">{{orderData.status}}</p>{{/if}} <br>
-                <b>Purchased products</b> <br>
-                {{#if returnData}}{{#each returnData}}{{item}}:{{returnStatus}}{{/each}}{{/if}}
-                <table style="border: 1px;border-style: solid;width: 100%;">
-                    <thead style="border-style: solid;border-width: 1px;">
-                        <tr>
-                            <th>Items</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody style="border: 1px;border-style: solid">
-                        <tr>
-                            <td>{{#each orderData.product}} <p>{{this.name}}</p>{{/each}}</td>
-                            <td>{{#each orderData.quantity}} <p>{{this}}</p>{{/each}}</td>
-                            <td>{{#each orderData.price}} <p>{{this}}</p>{{/each}}</td>
-                            <td>{{#each orderData.amount}} <p>{{this}}</p>{{/each}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-9 text-dark p-5" id="invoice" style="border: 1px;border-style: solid;">
+            <b> Date of order:</b>{{orderData.date}} <br>
+            <b>Name:</b>{{orderData.user}} <br>
+            <b>Delivery Address:</b><p id="userAddress">{{orderData.address}}</p> <br>
+            <b>Payment Method:</b>{{orderData.payment}} <br>
+            <b>Status:</b>{{#if orderData.is_rejected}}<p class="text-danger">Cancelled</p>{{else}}<p class="text-success">{{orderData.status}}</p>{{/if}} <br>
+            <b>{{#if returnData}}Return Status &nbsp; <br> {{#each returnData}}{{#each item}}{{this.name}}:{{../returnStatus}}{{/each}}{{/each}}{{/if}}</b>
+            <div style="color: red;" id="message"></div>
+            <b>Purchased products</b> <br>
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="prodId">{{#each orderData.product}}{{this.name}}&nbsp;{{this.category}} <br>  {{/each}}</td>
+                        <td id="proqty">{{#each orderData.quantity}}{{this}} <br> {{/each}}</td>
+                        <td id="proPrice">{{#each orderData.price}}{{this}} <br> {{/each}}</td>
+                        <td id="proamount">{{#each orderData.amount}}{{this}} <br> {{/each}}</td>
+                    </tr>
+                </tbody>
+            </table><br><br>
+            <div class="">
+                Total cost in cart : USD <strong id="tot"></strong><br>
+                Tax(18%)           : USD <strong id="tax">{{orderData.tax}}</strong><br>
+                Applied coupon     : <strong id="coupon">{{orderData.coupon}}</strong><br>
+                {{#if orderData.coupon}}
+                coupon discount    : USD <strong id="dis">{{orderData.discount}}</strong><br>
+                Total Paid         : USD <strong id="paid">{{orderData.total}}</strong><br>
+                {{else}}
+                Total Paid         : USD <strong id="paid">{{orderData.total}}</strong><br>
+                {{/if}}
             </div>
         </div>
-</div>
+    </div>
+</div><script>
+    window.onload=(()=>{
+        console.log('1')
+        console.log(document.getElementById('coupon').innerHTML)
+        console.log(typeof(document.getElementById('coupon').innerHTML))
+    if(document.getElementById('coupon').innerHTML !=''){
+    document.getElementById('tot').innerHTML = parseInt(document.getElementById('dis').innerHTML)+parseInt(document.getElementById('paid').innerHTML)-parseInt(document.getElementById('tax').innerHTML)
+    console.log(document.getElementById('tot').innerHTML)
+    }else{
+        document.getElementById('tot').innerHTML = parseInt(document.getElementById('paid').innerHTML)-parseInt(document.getElementById('tax').innerHTML)
+    }
+    })
+    
+
+</script>

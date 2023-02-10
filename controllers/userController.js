@@ -216,11 +216,12 @@ const loadLogin = async (req, res,next) => {
 //Home page loading
 const loadHome = async (req, res,next) => {
   try {
+    const productData = await Product.find({is_deleted:false}).lean()
     if(req.session.user_id){
       const userData  = await User.findById({_id:req.session.user_id}).lean()
-      res.render("home",{userData});
+      res.render("home",{userData,productData});
     }else{
-      res.render("home");
+      res.render("home",{productData});
     }
     
   } catch (error) {
@@ -425,6 +426,8 @@ const deleteAddress = async (req,res,next)=>{
 //wishlist load
 const loadWishList = async(req,res,next)=>{
   try {
+    console.log('1');
+    const data = await User.findById({_id:ObjectId(req.session.user_id)})
     const userData = await User.aggregate([{
       $match:{_id:ObjectId(req.session.user_id)}
     },{
@@ -438,7 +441,7 @@ const loadWishList = async(req,res,next)=>{
         as:'proData'
       }
     }])
-    console.log(userData[1].proData);
+    console.log(userData);
      res.render('wishlist',{userDatas:userData,userData:userData[0]})
   } catch (error) {
     next(error.messge);
@@ -581,9 +584,9 @@ const removeCartItem = async (req,res,next)=>{
 //place order
 const placeOrder = async(req,res,next)=>{
   try {
-
+    console.log(req.body);
     const userData = await User.findById({_id:req.session.user_id}).lean() 
-      const cartItem = await User.updateOne({_id:req.session.user_id,'cart.item_id':ObjectId(req.body.item)},{$set:{'cart.$.count':parseInt(req.body.qty)}})
+      // const cartItem = await User.updateOne({_id:req.session.user_id,'cart.item_id':ObjectId(req.body.item)},{$set:{'cart.$.count':parseInt(req.body.qty)}})
        
     const total = await User.aggregate([
       {$match:{_id:ObjectId(req.session.user_id)}},
@@ -670,21 +673,22 @@ const lookupoutData = category.map((x)=>{
 const proceedToPay = async(req,res,next)=>{
   try {
     const userData = await User.findById({_id:req.session.user_id}).lean()    
+    console.log(req.query);
       if(req.body.coupon){
-        const code = req.body.coupon
+        const code = req.query.coupon
         const couponData = await Coupon.find({code:code}).lean()
         if(couponData!=''){
           if (couponData[0].is_valid==true) {
-            const addressData=req.body.address
-            const totalamount = parseInt(req.body.total)
+            const addressData=req.query.address
+            const totalamount = parseInt(req.query.total)
             const discount = (totalamount*couponData[0].discount/100)
             const Total = totalamount-discount
             const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
             res.render('payment',{addressData,userData,total,totalamount,discount,code,tax})
           }else{
-            const addressData=req.body.address
-            const totalamount = parseInt(req.body.total)
+            const addressData=req.query.address
+            const totalamount = parseInt(req.query.total)
             console.log(totalamount);
             const Total = totalamount
             const tax = (Total*0.18)
@@ -693,17 +697,17 @@ const proceedToPay = async(req,res,next)=>{
           }
          
         }else{
-          const addressData = req.body.address
-          const totalamount = parseInt(req.body.total)
-          const Total = parseInt(req.body.total)
+          const addressData = req.query.address
+          const totalamount = parseInt(req.query.total)
+          const Total = parseInt(req.query.total)
           const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax}) 
         }
         }else{
-          const addressData = req.body.address
-          const totalamount = parseInt(req.body.total)
-          const Total = parseInt(req.body.total)
+          const addressData = req.query.address
+          const totalamount = parseInt(req.query.total)
+          const Total = parseInt(req.query.total)
           const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
@@ -926,8 +930,8 @@ const searchProduct = async (req,res,next)=>{
       $and:[
         {$or:[
           {name:{$regex:search,$options:'i'}},
-          {price:{$regex:parseInt(search),$options:'i'}},
-          {category:{$regex:search,$options:'i'}}
+          {category:{$regex:search,$options:'i'}},
+          // {price:{$regex:parseInt(search)}}
         ]},
         {is_deleted:false}]
     }).lean()
@@ -976,54 +980,65 @@ const checkCoupon = async(req,res,next)=>{
   }
 }
 
-//returnOrder
-const returnOrder = async (req,res,next)=>{
-  try {
-    const {id,reason,order_id} = req.body
-    // console.log(req.body);
-    const dr = await ReturnD.find().lean()
-    const orderQuantity = await Order.findById({_id:ObjectId(order_id)})
-    const ind = orderQuantity.product.findIndex((x,el)=>{
-      return x._id == id
-    })
-    const quantity = orderQuantity.quantity[ind]
-    if (dr!='') {
-      const ret = await ReturnD.find({order:ObjectId(order_id)}).lean()
-      // console.log(ret);
-      const check = ret.map((x)=>{
-        return x.item == id
-      })
-      if (ret == '' || (ret!='' && check[0] == false) ) {
-        const returnData = new ReturnD({
-          user:ObjectId(req.session.user_id),
-          order:ObjectId(order_id),
-          item:ObjectId(id),
-          quantity:quantity,
-          reason:reason,
-          returnStatus:'requested'
-          })
-        const saveReturn = returnData.save()
-        res.json('requested')
-      }else{
-      res.json('Exist')
-      }
-    }else{
-      const returnData = new ReturnD({
-        user:ObjectId(req.session.user_id),
-        order:ObjectId(order_id),
-        item:ObjectId(id),
-        quantity:quantity,
-        reason:reason,
-        returnStatus:'requested'
-        })
-      const saveReturn = returnData.save()
-      res.json('requested')
-      }
+// const loadreturnOrder = async(req,res,next)=>{
+//   try {
+//     res.render('returnProduct')
+//   } catch (error) {
+//     next(error)
+//   }
+// }
+
+// //returnOrder
+// const returnOrder = async (req,res,next)=>{
+//   try {
+//     const {id,reason,order_id} = req.body
+//     // console.log(req.body);
+//     const dr = await ReturnD.find().lean()
+//     const orderQuantity = await Order.findById({_id:ObjectId(order_id)})
+//     const ind = orderQuantity.product.findIndex((x,el)=>{
+//       return x._id == id
+//     })
+//     const quantity = orderQuantity.quantity[ind]
+//     if (dr!='') {
+//       const ret = await ReturnD.find({order:ObjectId(order_id)}).lean()
+//       // console.log(ret);
+//       const check = ret.map((x)=>{
+//         return x.item == id
+//       })
+//       console.log(Date.now());
+//       if (ret == '' || (ret!='' && check[0] == false) ) {
+//         const returnData = new ReturnD({
+//           date:Date.now(),
+//           user:ObjectId(req.session.user_id),
+//           order:ObjectId(order_id),
+//           item:ObjectId(id),
+//           quantity:quantity,
+//           reason:reason,
+//           returnStatus:'requested'
+//           })
+//         const saveReturn = returnData.save()
+//         res.json('requested')
+//       }else{
+//       res.json('Exist')
+//       }
+//     }else{
+//       const returnData = new ReturnD({
+//         date:Date.now(),
+//         user:ObjectId(req.session.user_id),
+//         order:ObjectId(order_id),
+//         item:ObjectId(id),
+//         quantity:quantity,
+//         reason:reason,
+//         returnStatus:'requested'
+//         })
+//       const saveReturn = returnData.save()
+//       res.json('requested')
+//       }
       
-  } catch (error) {
-    next(error)
-  }
-}
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 
 
 module.exports = {
@@ -1065,6 +1080,7 @@ module.exports = {
   decreaseCartCount,
   searchProduct,
   checkCoupon,
-  returnOrder
+  // returnOrder,
+  // loadreturnOrder
 
 };

@@ -53,7 +53,7 @@
     </div>
 
 
-    <div class="site-section site-blocks-2">
+    {{!-- <div class="site-section site-blocks-2">
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
@@ -91,46 +91,46 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
 
     <div class="site-section block-3 site-blocks-2 bg-light">
         <div class="container">
             <div class="row justify-content-center">
             <div class="col-md-7 site-section-heading text-center pt-4">
-                <h2>Featured Products</h2>
+                <h2>Latest Arrivals</h2>
             </div>
             </div>
             <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                <a class="block-2-item" href="#">
+            <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0"  data-aos="fade" data-aos-delay="">
+                <a class="block-2-item" href="/singleProduct?id={{productData.[0]._id}}">
                 <figure class="image">
-                    <img style="height: 50vh;" src="https://www.sportsuncle.com/image/cache/catalog/images/gray-nicolls/prestige-85-cricket-bat-full-1200x1200.webp" alt="" class="img-fluid">
+                    <img style="height: 50vh;" src="{{productData.[0].image.[0]}}" alt="" class="img-fluid">
                 </figure>
                 <div class="text">
-                    <h3>Grey-Nicolas prestige 8.5</h3>
-                    <h4 class="text-success">USD.32,000</h4>
+                    <h3>{{productData.[0].name}}</h3>
+                    <h4 class="text-success">USD.{{productData.[0].price}}</h4>
                 </div>
                 </a>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                <a class="block-2-item" href="#">
+                <a class="block-2-item" href="/singleProduct?id={{productData.[1]._id}}">
                 <figure class="image">
-                    <img style="height: 50vh;" src="https://m.media-amazon.com/images/I/81ps7W3hf-L._SL1500_.jpg" alt="" class="img-fluid">
+                    <img style="height: 50vh;" src="{{productData.[1].image.[0]}}" alt="" class="img-fluid">
                 </figure>
                 <div class="text">
-                    <h3>SG RSD Prolight</h3>
-                    <h4 class="text-success">USD.2,000</h4>
+                    <h3>{{productData.[1].name}}</h3>
+                    <h4 class="text-success">USD.{{productData.[1].price}}</h4>
                 </div>
                 </a>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                <a class="block-2-item" href="#">
+                <a class="block-2-item" href="/singleProduct?id={{productData.[2]._id}}">
                 <figure class="image">
-                    <img style="height: 50vh;" src="https://www.worldcricketstore.com/acatalog/NB22CSCK4040zm.jpg" alt="" class="img-fluid">
+                    <img style="height: 50vh;" src="{{productData.[2].image.[0]}}" alt="" class="img-fluid">
                 </figure>
                 <div class="text">
-                    <h3>New Balance CK4040R5</h3>
-                    <h4 class="text-success">USD.5,300</h4>
+                    <h3>{{productData.[2].name}}</h3>
+                    <h4 class="text-success">USD.{{productData.[2].price}}</h4>
                 </div>
                 </a>
             </div>
@@ -140,7 +140,7 @@
     </div>
 
     <div class="site-section block-8">
-      <div class="container">
+      <div class="container" >
         <div class="row justify-content-center  mb-5">
           <div class="col-md-7 site-section-heading text-center pt-4">
             <h2>Big Sale!</h2>
@@ -164,7 +164,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <center><h2 class="text-dark" >ABOUT US</h2></center>
+            <center><h2 class="text-dark" id="about" >ABOUT US</h2></center>
           </div>
           <div>
             <center><p class="text-dark " >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis
@@ -172,7 +172,7 @@
                 tincidunt fringillaLorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis ipsum animi deleniti fugiat. Ex, veniam?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis ipsum animi deleniti fugiat. Ex, veniam?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis ipsum animi deleniti fugiat. Ex, veniam?</p></center>
           </div>
            <div class=" col-md-12 mx-auto">
-            <center><button class=" stroke bg-light mb-2" style="width: 20vh;"><h3 style="font-size:25px ;">STROKE</h3></button><br></center>
+            <center><a href="/shop"><button class=" stroke bg-light mb-2"  style="width: 20vh;"><h3 style="font-size:25px ;">STROKE</h3></button></a><br></center>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="block-5 mb-5">

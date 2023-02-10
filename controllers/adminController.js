@@ -82,8 +82,17 @@ const loadInventory = async (req,res,next)=>{
         
         const products = await Product.aggregate([
             {$match:{is_deleted:false}},
-            {$lookup:{ from: 'categories', localField:'category', 
-              foreignField:'name',as:'category'}}
+            {$lookup:{ 
+                from: 'categories',
+                localField:'category', 
+                foreignField:'name',
+                as:'category'
+                }
+            },{
+                $sort:{
+                    date:-1
+                }
+            }
       ])
         res.render('inventory',{products})
     } catch (error) {
@@ -189,6 +198,7 @@ const insertProduct = async (req,res,next)=>{
                 return obj.filename;
               });  
         const newProduct = new Product({
+            date:Date.now(),
             name:req.body.name,
             category:req.body.category,
             description:req.body.description,
@@ -320,6 +330,7 @@ const viewOrder = async(req,res,next)=>{
        
         const orderData = await Order.findById({_id:req.query.id}).lean()
         res.render('viewOrder',{orderData})
+        console.log(orderData);
     } catch (error) {
         next(error)
     }
@@ -405,7 +416,7 @@ const productReturn = async (req,res,next)=>{
                 foreignField:"_id",
                 as:'order'
             }
-        }
+        },{$sort:{date:-1}}
     ])
         res.render('returnedProd',{requestData})
     } catch (error) {
@@ -416,7 +427,9 @@ const productReturn = async (req,res,next)=>{
 //acceptReturn
 const acceptReturn = async (req,res,next)=>{
     try {
+        console.log(req.body)
         const orderUp = await ReturnD.findByIdAndUpdate({_id:ObjectId(req.body.id)},{$set:{returnStatus:'confirmed'}})
+        console.log(orderUp);
         const item = orderUp.item
         const prod = await Order.find({_id:orderUp.order}).lean()
         const pp =  prod[0].product.map((x)=>{
@@ -426,7 +439,6 @@ const acceptReturn = async (req,res,next)=>{
         const refund = (prod[0].price[pc])
         // const amount = (orderUp[0].quantity)*(prod[0].)
         const walletUpdate = await User.findByIdAndUpdate({_id:orderUp.user},{$inc:{wallet:refund}})
-        console.log(walletUpdate);
         res.json('done')
     } catch (error) {
         next(error)
