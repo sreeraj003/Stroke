@@ -120,7 +120,7 @@ $(document).ready( function () {
         const id = document.getElementById('categoryID').value
         console.log(id)
        fetch("/admin/deleteCategory", {
-      method: "POST",
+      method: "delete",
       headers: {
         "Content-Type": "application/json"
       },

@@ -85,7 +85,7 @@
     const id = document.getElementById('cancel_id').value
     console.log(id)
     fetch("/cancelOrder", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },

@@ -143,7 +143,7 @@ $(document).ready( function () {
     function confirmBlock(){
         const id = document.getElementById('userID').value
         fetch("/admin/blockUser", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
@@ -170,7 +170,7 @@ $(document).ready( function () {
     function confirmUnBlock(){
         const id = document.getElementById('userUnID').value
         fetch("/admin/unblockUser", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },

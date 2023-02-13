@@ -105,7 +105,7 @@
     function confirmDelete(){
         const id = document.getElementById('addressID').value
        fetch("/deleteAddress", {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json"
       },

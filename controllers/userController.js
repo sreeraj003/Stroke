@@ -2,7 +2,6 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const randomstring = require('randomstring')
-const config = require('../config/cofig')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel');
 const Order = require('../models/orderModel');
@@ -297,12 +296,12 @@ const sendRestpasswordMail = async (name, email, token,next) => {
         secure: false,
         requireTLS: true,
         auth: {
-          user:config.emailUser ,
-          pass:config.emailPassword ,
+          user:process.env.MAIL ,
+          pass:process.env.PASS,
         },
       });
       const mailOptions = {
-        from: config.emailUser,
+        from: process.env.MAIL,
         to: email,
         subject: "For reset password",
         html:
@@ -426,7 +425,6 @@ const deleteAddress = async (req,res,next)=>{
 //wishlist load
 const loadWishList = async(req,res,next)=>{
   try {
-    console.log('1');
     const data = await User.findById({_id:ObjectId(req.session.user_id)})
     const userData = await User.aggregate([{
       $match:{_id:ObjectId(req.session.user_id)}
@@ -441,7 +439,6 @@ const loadWishList = async(req,res,next)=>{
         as:'proData'
       }
     }])
-    console.log(userData);
      res.render('wishlist',{userDatas:userData,userData:userData[0]})
   } catch (error) {
     next(error.messge);
@@ -584,7 +581,6 @@ const removeCartItem = async (req,res,next)=>{
 //place order
 const placeOrder = async(req,res,next)=>{
   try {
-    console.log(req.body);
     const userData = await User.findById({_id:req.session.user_id}).lean() 
       // const cartItem = await User.updateOne({_id:req.session.user_id,'cart.item_id':ObjectId(req.body.item)},{$set:{'cart.$.count':parseInt(req.body.qty)}})
        
@@ -673,7 +669,6 @@ const lookupoutData = category.map((x)=>{
 const proceedToPay = async(req,res,next)=>{
   try {
     const userData = await User.findById({_id:req.session.user_id}).lean()    
-    console.log(req.query);
       if(req.body.coupon){
         const code = req.query.coupon
         const couponData = await Coupon.find({code:code}).lean()
@@ -689,7 +684,6 @@ const proceedToPay = async(req,res,next)=>{
           }else{
             const addressData=req.query.address
             const totalamount = parseInt(req.query.total)
-            console.log(totalamount);
             const Total = totalamount
             const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
@@ -746,10 +740,8 @@ const success = async (req,res,next)=>{
       }
     ])
 
-     console.log(productData);
     const product = productData.map((x)=>{
       return x.product})
-console.log(product);
     const productName = product.map((x)=>{
       return x
     })
@@ -767,8 +759,6 @@ console.log(product);
         const element = await Product.findByIdAndUpdate({_id:product[i]._id},{$inc:{stock:-purchaseQuantity[i]}});
         const removeItem = await User.updateOne({_id:req.session.user_id},{"$pull": { "cart": { "item_id": productName[i]._id} }}, { safe: true, multi:true });
       }        
-      console.log(req.body.payment);
-      console.log(typeof(req.body.tax));
           if (req.body.coupon) {
               const order = new Order({
               id:req.session.user_id,
@@ -814,21 +804,16 @@ console.log(product);
             const walletUpdate = await User.findByIdAndUpdate({_id:req.session.user_id},{$inc:{wallet:-req.body.total}})
           }
         if (req.body.payment == 'online') {
-          console.log(2);
           res.json('ok')
         }else if(req.body.payment == 'wallet'){
-          console.log(1);
           res.json('done')
         }else{
           const userData = await User.findById({_id:req.session.user_id}).lean()
-          console.log(3);
           res.render('success',userData)
         }
         const today = new Date();
-        console.log(today);
         const due = new Date(today)
         const dueDate = due.setDate(today.getDate()+7)
-        console.log(dueDate);
 
   } catch (error) {
     next(error);
@@ -875,9 +860,6 @@ const cancelOrder = async (req,res,next)=>{
 //viewOrder
 const viewOrder = async (req,res,next)=>{
   try {
-    // console.log(req.query.id);
-
-    // console.log(returnData);
     const userData = await User.findById({_id:req.session.user_id}).lean()
     const orderData =await Order.findOne({_id:req.query.id}).lean()
     const returnData = await ReturnD.aggregate([{
@@ -894,7 +876,6 @@ const viewOrder = async (req,res,next)=>{
       }
     }
     ])
-    console.log(orderData);
     res.render('viewOrder',{orderData,userData,returnData})
   } catch (error) {
     next(error)
@@ -945,23 +926,15 @@ const searchProduct = async (req,res,next)=>{
 //check Coupon
 const checkCoupon = async(req,res,next)=>{
   try {
-    console.log(req.body.code);
     const userData = await User.findById({_id:req.session.user_id}).lean()
-    console.log(userData)
-    console.log('1');
     const coup = userData.coupons
     const code= req.body.code
     const total = req.body.total
     const couponData = await Coupon.find({code:code})
     if (couponData!='') {
-      console.log('2');
       if (couponData[0].is_valid==true) {
-        console.log('3');
         const checkUsed = coup.findIndex((x)=>{return x == req.body.code})
-
-        console.log(checkUsed);
         if (checkUsed==-1) {
-          console.log('4');
           const CouponDiscount = await Coupon.findOne({code:code}).lean()
           const discounted = total-(total*CouponDiscount.discount/100)
           res.json(discounted)
@@ -992,7 +965,6 @@ const checkCoupon = async(req,res,next)=>{
 // const returnOrder = async (req,res,next)=>{
 //   try {
 //     const {id,reason,order_id} = req.body
-//     // console.log(req.body);
 //     const dr = await ReturnD.find().lean()
 //     const orderQuantity = await Order.findById({_id:ObjectId(order_id)})
 //     const ind = orderQuantity.product.findIndex((x,el)=>{
@@ -1001,11 +973,9 @@ const checkCoupon = async(req,res,next)=>{
 //     const quantity = orderQuantity.quantity[ind]
 //     if (dr!='') {
 //       const ret = await ReturnD.find({order:ObjectId(order_id)}).lean()
-//       // console.log(ret);
 //       const check = ret.map((x)=>{
 //         return x.item == id
 //       })
-//       console.log(Date.now());
 //       if (ret == '' || (ret!='' && check[0] == false) ) {
 //         const returnData = new ReturnD({
 //           date:Date.now(),

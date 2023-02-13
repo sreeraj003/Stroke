@@ -51,7 +51,7 @@
             <center><button class=" stroke bg-light mb-2">Edit Product</button></center>
           </div>
         <div class="col-md-6">
-          <form class="row" action="" enctype="multipart/form-data" method="POST">  
+          <form class="row" action="" enctype="multipart/form-data" method="post">  
             <div>
               <p class="text-success">{{message}}</p>
             </div>            
@@ -149,7 +149,7 @@
     const imageName = document.getElementById('imageName').value
     const productId = document.getElementById('productId').value
   $.ajax({
-    type: 'POST',
+    type: 'DELETE',
     url: '/admin/removeProductImage',
     data: {
        imageName: imageName,

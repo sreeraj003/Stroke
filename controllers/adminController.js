@@ -173,11 +173,6 @@ const loadEditProduct = async (req,res,next)=>{
 //edit product
 const editProduct = async (req,res,next)=>{
     try {
-        // const proData = await Product.findById({_id:req.query.id}).lean()
-        // if (req.files.length<(5-proData.image.length)) {
-        //     console.log(req.files.length);
-        // }
-        // console.log(proData);
         let imagesFilename = req.files.map(function (obj) {
             return obj.filename;
           });  
@@ -290,20 +285,6 @@ const rejectOrder = async(req,res,next)=>{
         next(error.message);
     }
 }
-//proceeed order
-const proceedOrder = async (req,res,next)=>{
-    try {
-        const orderData = await Order.findOne({_id:req.query.id}).lean()
-        for (let i = 0; i < orderData.product.length; i++) {
-            const element = await Product.findByIdAndUpdate({_id:orderData.product[i]._id},{$inc:{stock:-orderData.quantity[i]}});      
-        }
-        const orderUpdate = await Order.findOneAndUpdate({_id:req.query.id},{$set:{is_rejected:0}})
-        res.redirect('/admin/order')
-    } catch (error) {
-        next(error.message);
-    }
-}
-
 //changeStatus
 const changeStatus = async(req,res,next)=>{
     try {
@@ -330,7 +311,6 @@ const viewOrder = async(req,res,next)=>{
        
         const orderData = await Order.findById({_id:req.query.id}).lean()
         res.render('viewOrder',{orderData})
-        console.log(orderData);
     } catch (error) {
         next(error)
     }
@@ -427,9 +407,7 @@ const productReturn = async (req,res,next)=>{
 //acceptReturn
 const acceptReturn = async (req,res,next)=>{
     try {
-        console.log(req.body)
         const orderUp = await ReturnD.findByIdAndUpdate({_id:ObjectId(req.body.id)},{$set:{returnStatus:'confirmed'}})
-        console.log(orderUp);
         const item = orderUp.item
         const prod = await Order.find({_id:orderUp.order}).lean()
         const pp =  prod[0].product.map((x)=>{
@@ -518,7 +496,6 @@ const timeSearch = async(req,res,next)=>{
         const fromdate = new Date(timestamp);
         const toTime = Date.parse(to)
         const todate = new Date(toTime)
-        console.log(todate);
         const countArray = []
         const cancelCount = []
         let orderData = await Order.find().lean()
@@ -527,7 +504,6 @@ const timeSearch = async(req,res,next)=>{
            return(new Date(obj.date)>=fromdate && new Date(obj.date)<=todate)
         //    
         })
-        console.log(orderData)
         const categories = await Category.find().lean()
         const categoryData = categories.map((el)=>{
             return el.name
@@ -574,7 +550,6 @@ const loadSalesReport = async(req,res,next)=>{
         const salesData = await Order.find({is_rejected:0}).lean()        
         const groupedData = {};
         const gross = 0
-        console.log(salesData);
         salesData.forEach(item => {
         const date = item.date;
         if (!groupedData[date]) {
@@ -583,7 +558,6 @@ const loadSalesReport = async(req,res,next)=>{
         groupedData[date].push(item);
         });
         // const keyVal = groupedData.keys()
-        console.log(groupedData);
         res.render('salesReport',{groupedData})
     } catch (error) {
         next(error)
@@ -593,20 +567,16 @@ const loadSalesReport = async(req,res,next)=>{
 //loadSearchSalesReport
 const loadSearchSalesReport = async(req,res,next)=>{
     try {
-        console.log(req.body);
         let salesData = await Order.find({is_rejected:0}).lean()   
-        const from = req.body.fromDate
-            const to =req.body.toDate
+            const from = req.query.fromDate
+            const to =req.query.toDate
             const timestamp = Date.parse(from);
             const fromdate = new Date(timestamp);
             const toTime = Date.parse(to)
             const todate = new Date(toTime)
-            console.log(fromdate);
-            console.log(typeof(fromdate));
             salesData = salesData.filter((obj)=>{
                 return(new Date(obj.date)>=fromdate)
             })
-            console.log(salesData);
             const groupedData = {};
             const gross = 0
 
@@ -617,7 +587,6 @@ const loadSearchSalesReport = async(req,res,next)=>{
             }
             groupedData[date].push(item);
             });
-            console.log(groupedData);
             res.render('salesReport',{groupedData})
     } catch (error) {
         next(error)
@@ -644,7 +613,6 @@ module.exports = {
     editProduct,
     loadOrders,
     rejectOrder,
-    proceedOrder,
     viewOrder,
     changeStatus,
     loadCoupon,

@@ -139,7 +139,7 @@ $(document).ready( function () {
     const id = document.getElementById("order_id").value
     console.log(id)
     fetch("/admin/rejectOrder", {
-      method: "POST",
+      method: "put",
       headers: {
         "Content-Type": "application/json"
       },
@@ -165,7 +165,7 @@ $(document).ready( function () {
     const id = data
     console.log(id)
     fetch("/admin/changeStatus", {
-      method: "POST",
+      method: "put",
       headers: {
         "Content-Type": "application/json"
       },

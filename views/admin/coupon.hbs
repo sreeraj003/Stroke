@@ -144,7 +144,7 @@ $(document).ready( function () {
     function confirmBlock(){
       const id = document.getElementById('couponID').value
     fetch("/admin/blockCoupon", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
