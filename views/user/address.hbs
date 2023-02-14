@@ -17,43 +17,40 @@
                 <form class="row" action="" method="post">
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">House No / Name</label>
-                    <input type="text" name="house_no" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                    <input type="text" name="house_no" class="form-control" required id="inputAddress" placeholder="1234 Main St">
                 </div>
                 <div class="col-12">
                     <label for="inputAddress2" class="form-label">Place</label>
-                    <input type="text" name="place"  class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                    <input type="text" name="place"  class="form-control" required id="inputAddress2" placeholder="Apartment, studio, or floor">
                 </div>
                 <div class="col-md-6">
                     <label for="inputTown" class="form-label">Town</label>
-                    <input type="text" name="town" class="form-control" id="inputCity">
+                    <input type="text" name="town" class="form-control" required id="inputCity">
                 </div>
                 <div class="col-md-6">
                     <label for="inputCity" class="form-label">City</label>
-                    <input type="text" name="city" class="form-control" id="inputCity">
+                    <input type="text" name="city" class="form-control" required id="inputCity">
                 </div>
                 <div class="col-md-6">
                     <label for="inputDist" class="form-label">Dist.</label>
-                    <input type="text" name="dist" class="form-control" id="inputDist">
+                    <input type="text" name="dist" class="form-control" required id="inputDist">
                 </div>
                 <div class="col-md-6">
                     <label for="inputState" class="form-label">State</label>
-                    <input type="text" name="state" class="form-control" id="inputState">
+                    <input type="text" name="state" class="form-control" required id="inputState">
                 </div>
                 <div class="col-md-6">
                     <label for="inputState" class="form-label">country</label>
-                    <input type="text" name="country" class="form-control" id="inputState">
+                    <input type="text" name="country" class="form-control" required id="inputState">
                 </div>
                 <div class="col-md-6">
                     <label for="inputZip" class="form-label">Zip</label>
-                    <input type="text" name="zip" class="form-control" id="inputZip">
+                    <input type="number" name="zip" class="form-control" required id="inputZip">
                 </div>
                 <div class="col-12">
                     <br><center><button type="submit" class="btn btn-info">Submit</button></center>
                 </div>
                 </form>
-                {{!-- <input type="hidden" name="user_id" value="{{addressData._id}}"> --}}
-                <br>
-                {{!-- <button type="submit" class="btn btn-info">Submit</button> --}}
             </div>
         </div>
         <div class="col-md-3">

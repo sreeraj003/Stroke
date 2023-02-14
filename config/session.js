@@ -2,7 +2,7 @@ const session = require('express-session')
 require('dotenv').config()
 
 const checkSession = session({
-    secret:"mysessionsecret",
+    secret:process.env.SESSION_SECRET,
     saveUninitialized:false,
     resave:false,
     cookie:{

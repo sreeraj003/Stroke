@@ -824,6 +824,7 @@ const success = async (req,res,next)=>{
 const successLoad = async(req,res,next)=>{
   try {
     const userData = await User.findById({_id:ObjectId(req.session.user_id)}).lean()
+    console.log(userData);
     res.render('success',{userData})
   } catch (error) {
     next(error)
@@ -917,7 +918,8 @@ const searchProduct = async (req,res,next)=>{
         {is_deleted:false}]
     }).lean()
     const categoryData = await Category.find({is_deleted:false}).lean()
-    res.render('shop',{productsData,categoryData})
+    const userdata = await User.find().lean()
+    res.render('shop',{productsData,categoryData,userdata})
   } catch (error) {
     next(error)
   }
