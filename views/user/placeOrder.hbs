@@ -2,7 +2,7 @@
         <div class="row">
             <div class="col-md-6 mt-4 bg-body" >
                 <h3 class="text-dark">Deliver To Address <a href="/address"><button class="btn btn-primary float-right" style="height: 30px;"><h6>New address</h6></button></a></h3>
-                <form action="/placeorders" id="formId" method="get">
+                <form action="/placeorders" id="formId" method="post">
                 {{#each addressData}}
                 <div class="text-danger">{{message}}</div>
                 <div class="form-check text-dark col-md-12" onclick="buttonshow()"  style="word-break: break-all;">

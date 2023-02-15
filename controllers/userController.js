@@ -668,22 +668,31 @@ const lookupoutData = category.map((x)=>{
 //proceed To pay
 const proceedToPay = async(req,res,next)=>{
   try {
-    const userData = await User.findById({_id:req.session.user_id}).lean()    
+    const userData = await User.findById({_id:req.session.user_id}).lean()   
       if(req.body.coupon){
-        const code = req.query.coupon
+        const code = req.body.coupon
         const couponData = await Coupon.find({code:code}).lean()
+        console.log(couponData);
         if(couponData!=''){
           if (couponData[0].is_valid==true) {
-            const addressData=req.query.address
-            const totalamount = parseInt(req.query.total)
+            const addressData=req.body.address
+            const totalamount = parseInt(req.body.total)
+            console.log(totalamount);
             const discount = (totalamount*couponData[0].discount/100)
             const Total = totalamount-discount
+            console.log(discount);
+            console.log(typeof(discount));
+            console.log(Total);
+            console.log(typeof(Total));
             const tax = (Total*0.18)
+            console.log(tax);
             const total = (Total+tax).toFixed(2)
+            console.log(total);
+            console.log(typeof(total));
             res.render('payment',{addressData,userData,total,totalamount,discount,code,tax})
           }else{
-            const addressData=req.query.address
-            const totalamount = parseInt(req.query.total)
+            const addressData=req.body.address
+            const totalamount = parseInt(req.body.total)
             const Total = totalamount
             const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
@@ -691,17 +700,17 @@ const proceedToPay = async(req,res,next)=>{
           }
          
         }else{
-          const addressData = req.query.address
-          const totalamount = parseInt(req.query.total)
-          const Total = parseInt(req.query.total)
+          const addressData = req.body.address
+          const totalamount = parseInt(req.body.total)
+          const Total = parseInt(req.body.total)
           const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax}) 
         }
         }else{
-          const addressData = req.query.address
-          const totalamount = parseInt(req.query.total)
-          const Total = parseInt(req.query.total)
+          const addressData = req.body.address
+          const totalamount = parseInt(req.body.total)
+          const Total = parseInt(req.body.total)
           const tax = (Total*0.18)
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
@@ -716,7 +725,7 @@ const proceedToPay = async(req,res,next)=>{
 //success
 const success = async (req,res,next)=>{
   try {
-
+console.log(req.body);
     const userData = await User.findById({_id:req.session.user_id}).lean()
     const productData = await User.aggregate([
       {$match:{_id:ObjectId(req.session.user_id)}},
