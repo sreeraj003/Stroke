@@ -1,26 +1,20 @@
   <div class="site-wrap">
-    <div class="bg-light py-3">
+    <div class="">
     <div class="site-section">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-9 order-2">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="float-md-left">
-                  <h2 class="text-black h5 mb-0">Shop All</h2>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-5">
+      <div class="container" >
+        <h2 class="text-black h5 mb-0">Shop All</h2>
+        <div class="row bg-light pb-5 pt-3">
+          <div class="col-md-9 mt-0 order-2">
+            <div class="row" style="margin-top: -50px;">
               {{#each productsData  }}
               {{#if is_deleted }}
               {{else}}
               <div class="col-sm-6 col-lg-4 mb-5" style="width: 16.1rem" data-aos="fade-up">
                   <div class="card mb-3" style="width: 16.1rem; margin-top: -50px;">
                   <a href="/singleProduct?id={{this._id}}"><img style="width: 16rem;height: 17rem;" src="{{this.image.[0]}}" class="card-img-top" alt="..."></a>
-                  <div class="card-body">
-                    <h5 class="card-title"><a href="/singleProduct?id={{this._id}}">{{this.name}} by {{this.brand}}</a></h5>
-                    <p class="card-text text-success">USD.{{this.price}}</p>
+                  <div class="card-body" style="background-color: rgb(199, 255, 197);">
+                    <h5 class="card-title text-dark" style="text-decoration: none;!important"><a  href="/singleProduct?id={{this._id}}">{{this.name}} by {{this.brand}}</a></h5>
+                    <p class="card-text text-dark">USD.{{this.price}}</p>
                     {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
                   </div>
                 </div>
@@ -32,52 +26,25 @@
           </div>
 
           <div class="col-md-3 order-1 mb-5 mb-md-0" style="width: 14rem;height: 100%;">
-            <div class="border p-4 rounded mb-4 ">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+            <div class="border p-4 rounded mb-4 bg-light">
+              <h3 class="mb-3 h6 text-uppercase text-primary d-block">Categories</h3>
               <ul class="list-unstyled mb-0">
                 {{#each categoryData}}
-                <li class="mb-1"><a href="/CategorySearch?category={{name}}" class="d-flex"><span>{{this.name}}</span></a></li>
+                <li class="mb-1"><a href="/CategorySearch?category={{name}}" class="d-flex text-dark"><span>{{this.name}}</span></a></li>
                 {{/each}}
               </ul>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="site-section site-blocks-2">
-                {{!-- <div class="row justify-content-center text-center mb-5">
-                  <div class="col-md-7 site-section-heading pt-4">
-                    <h2>Categories</h2>
-                  </div>
-                </div> --}}
-                {{!-- <div class="row">
-                  {{#each categoryData}}
-                  <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" style="width: 20rem;" data-aos="fade" data-aos-delay="">
-                    <a class="block-2-item mb-2" style="width: 20rem;height: 16rem;" href="/singleProduct?name={{this.name}}">
-                      <figure style="width: 20rem;" class="image">
-                        <img style="height: 16rem;" src="{{this.image}}" alt="" class="img-fluid">
-                      </figure>
-                      <div class="text">
-                        <span class="text-uppercase">Collections</span>
-                        <h3>{{this.name}}</h3>
-                      </div>
-                    </a>
-                  </div>
-                  {{/each}}            
-            </div> --}}
-          </div>
-        </div>
-        
+        </div>        
       </div>
     </div>
 
     <footer class="site-footer border-top bg-white">
       <div class="container">
         <div class="row">
-          <div class="col-lg-6 mb-5 mb-lg-0">
-                <div class="block-5 mb-5">
-                  <h3 class="footer-heading mb-4">Contact Info</h3>
+          <div class="col-lg-6 mb-lg-0">
+                <div class="block-5">
+                  <h3 class="footer-heading ">Contact Info</h3>
                   <ul class="list-unstyled">
                     <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
                     <li class="phone"><a href="tel://23923929210">+91 392 3929 210</a></li>
@@ -89,8 +56,5 @@
       </div>
     </footer>
   </div>
-
-
-    
   </body>
 </html>

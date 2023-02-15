@@ -1,18 +1,18 @@
 
   <div class="site-wrap">
-    <div class="bg-light py-3">
+    <div class="bg-light">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><span class="mx-2 mb-0">/</span> <strong class="text-black">{{Item.name}}</strong></div>
+          <div class="col-md-12 mb-0"><span class="mx-2 mb-0">Shop/</span> <strong class="text-black">{{Item.name}}</strong></div>
         </div>
       </div>
     </div>  
-    <div class="site-section">
-      <div class="container">
+    <div class="site-section" style="background-color: rgb(236, 234, 254);">
+      <div class="container bg-light">
         <div class="row">
           <div class="col-md-6">
             <div class="text-center col-12 zoom-image" data-image="/{{Item.image.[0]}}">
-                <img class="col-12" id="main-image" src="/{{Item.image.[0]}} " width="520" height="500px"> 
+                <img class="col-12" id="main-image" src="/{{Item.image.[0]}} " width="400px" height="400px"> 
             </div>
                
               <div class=" mt-1 g-1" style="flex-direction: row!important;display: inline-flex;">\
@@ -22,24 +22,11 @@
               </div>
                     
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 bg-light p-5" style="border-style:solid ;border-color: black;border-width: 1px;">
             <h2 class="text-black">{{Item.name}} {{Item.brand}}</h2>
             <p>{{Item.description}}</p>
             <p><strong class="text-primary h4">USD.{{Item.price}}</strong></p>
-            <div class="mb-1 d-flex">
-              <label for="option-sm" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-sm" name="shop-sizes"></span> <span class="d-inline-block text-black">Small</span>
-              </label>
-              <label for="option-md" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-md" name="shop-sizes"></span> <span class="d-inline-block text-black">Medium</span>
-              </label>
-              <label for="option-lg" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-lg" name="shop-sizes"></span> <span class="d-inline-block text-black">Large</span>
-              </label>
-              <label for="option-xl" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xl" name="shop-sizes"></span> <span class="d-inline-block text-black"> Extra Large</span>
-              </label>
-            </div>
+           
             <div class="mb-5 ">
               <form id="formId" action="/addcartitem" method="post">      
                 <input class="mb-1"type="button" onclick="decrementValue()" value="-" />
@@ -55,14 +42,14 @@
         </div>
       </div>
     </div>
-    <div class="site-section block-3 site-blocks-2 bg-light">
+    {{!-- <div class="site-section block-3 site-blocks-2 bg-light">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-7 site-section-heading text-center pt-4">
             <h2>Featured Products</h2>
           </div>
         </div>
-    </div>
+    </div> --}}
   </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>

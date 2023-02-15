@@ -1,7 +1,5 @@
 <div class="container">
-    <div class="row">
-        <div class="col-2" style="height: 55.8vh;">
-        </div>
+    <div class="row mt-4">
         <div class="col-10 text-black" style="width: 100%;">
             {{#each userDatas}}
             {{#each proData}}
@@ -17,7 +15,7 @@
                             <p>{{description}}</p>                      
                         </div>
                     </div>
-                    <div class="col-md-4 align-items-center text-center">
+                    <div class="col-md-4 align-items-center text-center mt-4">
                         <a href="/singleProduct?id={{_id}}"><button class="mt-1 mb-1 btn btn-primary pt-1" style="height: 30px;" type="submit" >View</button></a>
                         <button type="button" class="btn btn-danger pt-1" data-bs-toggle="modal" style="height: 30px;" onclick="removeWishlist('{{_id}}')" data-bs-target="#exampleModal">Remove</button>             
                          <form id="formId" class="mt-0" action="/addcartitem" method="post">      

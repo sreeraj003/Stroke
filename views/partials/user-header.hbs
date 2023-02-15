@@ -1,5 +1,5 @@
 <header class="site-navbar" tabindex="0" >
-  <div class="site-navbar-top">
+  <div class="site-navbar-top  bg-primary">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
@@ -9,13 +9,13 @@
           </form> --}}
           <form class="d-flex site-block-top-search" action="/searchProduct" method="post" role="search">
         <input class="form-control me-2" type="text" name="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
+        <button class="btn btn-outline-light" type="submit">Search</button>
       </form>
         </div>
 
         <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
           <div class="site-logo">
-            <a href="/home" class="js-logo-clone">STROKE</a>
+            <a href="/home" class="js-logo-clone border-light text-light">STROKE</a>
           </div>
         </div>
 
@@ -23,9 +23,9 @@
           <div class="site-top-icons">
             <ul>
               <li>
-                <div class="dropdown"> 
+                <div class="dropdown text-light"> 
                     {{#if userData}}
-                    Hello {{userData.name}}&nbsp;&nbsp;&nbsp;&nbsp;<button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
+                    Hello {{userData.name}}&nbsp;&nbsp;&nbsp;&nbsp;<button class="bg-primary home_profile text-light" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
                     <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/profile?id={{userData._id}}">profile</a></li>
                     <li><a class="dropdown-item" href="/logout">logout</a></li>
@@ -42,7 +42,7 @@
               <li>
                 <div class="dropdown">
                     {{#if userData}}
-                    <a href="/wishListPage"><button class="bg-light homr_profile" style="border:0px" type="button"><i class="fa-solid fa-heart"></i></button></a>
+                    <a href="/wishListPage"><button class="bg-primary homr_profile text-light" style="border:0px" type="button"><i class="fa-solid fa-heart"></i></button></a>
                     {{else}}
                     <button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-heart"></i></button>
                     <ul class="dropdown-menu">
@@ -56,7 +56,7 @@
               <li>
                 <div class="dropdown">
                     {{#if userData}}
-                    <a href="/cart"><button class="bg-light home_profile" style="border: 0ch;" type="button"><i class="fa-solid fa-cart-shopping"></i></button></a>
+                    <a href="/cart"><button class="bg-primary home_profile text-light" style="border: 0ch;" type="button"><i class="fa-solid fa-cart-shopping"></i></button></a>
                     {{else}}
                     <button class="bg-light home_profile" style="border: 0ch;" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-cart-shopping"></i></button>
                     <ul class="dropdown-menu">
