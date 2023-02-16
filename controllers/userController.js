@@ -450,8 +450,6 @@ const addWishlistItem = async(req,res,next)=>{
   try {
     // const itemData = await Product.findById({_id:req.body.item_id})
     const updatewishlist = await User.findByIdAndUpdate({_id:req.session.user_id},{$addToSet:{wishlist:ObjectId(req.body.id)}})
-    const Item = await Product.findById({_id:req.query.id}).lean()
-    res.render('shop-single',{Item})
   } catch (error) {
     next(error);
   }
@@ -549,6 +547,7 @@ const loadCart = async (req,res,next)=>{
 const addCartItem = async (req,res,next)=>{
   const itemId = ObjectId(req.body.item_id)
   const number = parseInt(req.body.count)
+  console.log(req.body);
   try {
       const Item = await Product.findById({_id:req.body.item_id}).lean()
       const userData = await User.findById({_id:req.session.user_id}).lean()
@@ -672,29 +671,20 @@ const proceedToPay = async(req,res,next)=>{
       if(req.body.coupon){
         const code = req.body.coupon
         const couponData = await Coupon.find({code:code}).lean()
-        console.log(couponData);
         if(couponData!=''){
           if (couponData[0].is_valid==true) {
             const addressData=req.body.address
             const totalamount = parseInt(req.body.total)
-            console.log(totalamount);
             const discount = (totalamount*couponData[0].discount/100)
             const Total = totalamount-discount
-            console.log(discount);
-            console.log(typeof(discount));
-            console.log(Total);
-            console.log(typeof(Total));
-            const tax = (Total*0.18)
-            console.log(tax);
+            const tax = parseFloat((Total*0.18).toFixed(2))
             const total = (Total+tax).toFixed(2)
-            console.log(total);
-            console.log(typeof(total));
             res.render('payment',{addressData,userData,total,totalamount,discount,code,tax})
           }else{
             const addressData=req.body.address
             const totalamount = parseInt(req.body.total)
             const Total = totalamount
-            const tax = (Total*0.18)
+            const tax = parseFloat((Total*0.18).toFixed(2))
             const total = (Total+tax).toFixed(2)
             res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
           }
@@ -703,7 +693,7 @@ const proceedToPay = async(req,res,next)=>{
           const addressData = req.body.address
           const totalamount = parseInt(req.body.total)
           const Total = parseInt(req.body.total)
-          const tax = (Total*0.18)
+          const tax = parseFloat((Total*0.18).toFixed(2))
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax}) 
         }
@@ -711,7 +701,7 @@ const proceedToPay = async(req,res,next)=>{
           const addressData = req.body.address
           const totalamount = parseInt(req.body.total)
           const Total = parseInt(req.body.total)
-          const tax = (Total*0.18)
+          const tax = parseFloat((Total*0.18).toFixed(2))
             const total = (Total+tax).toFixed(2)
           res.render('payment',{addressData,userData,total,totalamount,discount:0,tax})
         }
@@ -818,7 +808,8 @@ console.log(req.body);
           res.json('done')
         }else{
           const userData = await User.findById({_id:req.session.user_id}).lean()
-          res.render('success',userData)
+          console.log(userData);
+          res.render('success',{userData})
         }
         const today = new Date();
         const due = new Date(today)

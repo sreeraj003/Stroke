@@ -14,9 +14,9 @@
                             <h5 class="card-text   text-success mb-0" >USD:<h5 id="pro_{{product._id}}">{{this.product.price}}</h5></h5>
                             <div class="mt-1 ">
                                 <form action="/proceedCheckout" id="formsub" method="get">
-                                    <button class="mb-1"type="button" onclick="decrease('{{product._id}}')" value="{{product._id}}">-</button>
+                                    <button class="mb-1 btn btn-warning" style="height: 35px;width: 35px;" type="button" onclick="decrease('{{product._id}}')" value="{{product._id}}">-</button>
                                     <input class="mb-1 text-center" name="count"  type="text"  value="{{quantity}}" maxlength="2" min="1"  max="10" size="1" id="id_{{product._id}}">
-                                    <button class="mb-1"type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>                                    
+                                    <button class="mb-1 btn btn-warning" style="height: 35px;width: 35px;" type="button" onclick="increase('{{product._id}}')" value="{{product._id}}">+</button>                                    
                                 </form>
                             </div>
                         </div>    

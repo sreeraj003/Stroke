@@ -1,6 +1,6 @@
 <div class="container">
         <div class="row">
-            <div class="col-md-6 mt-4 bg-body" >
+            <div class="col-md-6 mt-4 bg-body p-5" >
                 <h3 class="text-dark">Deliver To Address <a href="/address"><button class="btn btn-primary float-right" style="height: 30px;"><h6>New address</h6></button></a></h3>
                 <form action="/placeorders" id="formId" method="post">
                 {{#each addressData}}
@@ -23,10 +23,9 @@
                 <div id="message"></div>
                 <button class="btn btn-primary mt-2 mx-auto" onclick="Buttoncheck()">Apply</button>    
             </div>
-            <div class="col-md-6 align-items-center text-center mt-4">
-               
-                <table class="table mt-3" style="border-style: solid;border-width: 1px;">
-                    <thead>
+            <div class="col-md-6 bg-light align-items-center text-center mt-4">
+                <table class="table mt-3 bg-light">
+                    <thead class="bg-success" style="" >
                         <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Qty</th>

@@ -12,9 +12,11 @@
               <div class="col-sm-6 col-lg-4 mb-5" style="width: 16.1rem" data-aos="fade-up">
                   <div class="card mb-3" style="width: 16.1rem; margin-top: -50px;">
                   <a href="/singleProduct?id={{this._id}}"><img style="width: 16rem;height: 17rem;" src="{{this.image.[0]}}" class="card-img-top" alt="..."></a>
-                  <div class="card-body" style="background-color: rgb(199, 255, 197);">
+                  <div class="card-body" style="background-color:rgb(221, 239, 250)">
                     <h5 class="card-title text-dark" style="text-decoration: none;!important"><a  href="/singleProduct?id={{this._id}}">{{this.name}} by {{this.brand}}</a></h5>
                     <p class="card-text text-dark">USD.{{this.price}}</p>
+                    <center><button class="btn btn-success p-2" onclick="addtocart('{{this._id}}')" >Add To Cart</button><p></p></center>
+                    <center><button class="btn btn-primary p-2" onclick="addtowishlist('{{this._id}}')">Add To wishlist</button></center>
                     {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
                   </div>
                 </div>
@@ -58,3 +60,47 @@
   </div>
   </body>
 </html>
+<script>
+  function addtocart(id){
+    const count = 1
+    const item_id = id
+    console.log(id)
+   $.ajax({
+      type:'POST',
+      url:'/addcartitem',
+      contentType:'application/json',
+      data:{
+        count: count,
+        item_id: item_id
+      },
+      success:function(data){
+
+      },
+      error:function(error){
+      console.log(error)
+    }
+  })
+  }
+
+  function addtowishlist(id){
+
+  }
+</script>
+{{!-- fetch("/addcartitem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        count:count,
+        item_id: item_id
+      })
+    })
+    .then(response => {
+        })
+    .then(data=>{
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  } --}}

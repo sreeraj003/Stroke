@@ -74,32 +74,11 @@
 
   }
 </script>
-{{!-- $.ajax({
-    type: 'POST',
-    url: '/admin/addcartitem',
-    Content-Type:'application/json'
-    data: {
-       count: count,
-       item_id: item_id
-        },
-    success: function (data) {
-      console.log(data)
-    },
-    error: function (error) {
-      // handle error
-      console.error('Failed to add item to cart');
-    }
-  }); --}}
-
-
 <script>
   $('#addToCart').click(function(){
-    console.log('1')
+
     const count = document.getElementById('number').value
-    console.log('2')
-    console.log(count)
     const item_id = document.getElementById('item_id').value
-    console.log(item_id)
     $.ajax({
       type:'POST',
       url:'/addcartitem',

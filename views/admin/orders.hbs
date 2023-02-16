@@ -56,7 +56,7 @@
                             <thead>
                                 <tr>
                                   <th>SL No</th>
-                                    <th style="width: 200px;">Date</th>
+                                    <th>Date</th>
                                     <th>User</th>
                                     <th>Products</th>
                                     <th>total</th>
@@ -69,7 +69,7 @@
                                 {{#each orderData}}                                
                                 <tr>
                                     <td>{{num @index}}</td>
-                                    <td style="width: 200px;">{{date}}</td>
+                                    <td>{{date}}</td>
                                     <td>{{user}}</td>
                                     <td>{{#each product}}{{this.name}}&nbsp;{{this.category}}<br>{{/each}}</td>
                                     <td>{{#each amount}}{{this}} <br>{{/each}} <input type="hidden" id="idValue" value="{{_id}}"></td>

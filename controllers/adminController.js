@@ -262,10 +262,12 @@ const deleteCategory = async(req,res,next)=>{
 //orders
 const loadOrders = async (req,res,next)=>{
     try {
-        const orderData = await Order.find().sort({date:1}).lean()
+        const orderData = await Order.find().sort({date:-1}).lean()
+        console.log(orderData);
         const orderDate = orderData.map((X) => {
             return moment(X.date).format("Do MMM YYYY");
         })
+        console.log(orderDate);
         res.render('orders',{orderData,orderDate})
     } catch (error) {
         next(error.message);
